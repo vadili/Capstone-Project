@@ -10,7 +10,9 @@ Intern Director: [Carl Taylor]
 
 Peer(s): [Yao Li & Xichan Liu]
 
-GitHub Repository Link: [https://github.com/vadili?tab=repositories]
+GitHub Repository Link: [https://github.com/vadili?tab=repositories
+
+Docs link: https://docs.google.com/document/d/14sie1bPB0aDJwBRglfbTcDlu8tFEoHv7aqwpb_7YEHM/edit 
 
 Overview:[FindMe is an interactive app designed to bridge the gap between recruiters and college students from underrepresented backgrounds, lesser-known schools, and diverse genders. The app aims to provide these students with access to tech internships that they might not be aware of. Unlike typical professional networking platforms, FindMe facilitates direct communication between recruiters and students, ensuring more personalized and effective interactions.]
 
