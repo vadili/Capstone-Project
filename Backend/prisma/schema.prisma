@@ -15,18 +15,17 @@ generator client {
 
 model User {
   id                  Int      @id @default(autoincrement())
-  userId              String   @unique
   firstName           String
   lastName            String
   email               String   @unique
   password            String
-  userType            Int
+  userType            String
   school              String?
   gpa                 String?
   major               String?
   gender              String?
   raceEthnicity       String?
-  technicalSkills     String?
+  technicalSkills     Json?
   previousInternships Boolean?
   company             String?
   companyCulture      String?
