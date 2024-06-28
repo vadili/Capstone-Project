@@ -11,16 +11,30 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.json());
 
 app.post('/signup', async (req, res) => {
-    const { name, email, password, role } = req.body;
+    const {
+        userId, firstName, lastName, email, password, userType, school, gpa, major, gender,
+        raceEthnicity, technicalSkills, previousInternships, company, companyCulture
+    } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
         const user = await prisma.user.create({
             data: {
-                name,
+                userId,
+                firstName,
+                lastName,
                 email,
                 password: hashedPassword,
-                role
+                userType,
+                school,
+                gpa,
+                major,
+                gender,
+                raceEthnicity,
+                technicalSkills,
+                previousInternships,
+                company,
+                companyCulture
             }
         });
         res.status(201).json(user);
