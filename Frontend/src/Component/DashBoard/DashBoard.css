@@ -114,4 +114,37 @@
     padding: 10px 20px;
     background-color: rgb(147, 147, 213);
     color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .footer-info {
+    flex: 1;
+  }
+
+  .address {
+    margin-right: auto;
+  }
+
+  .social-links {
+    margin-left: auto;
+    order: -1;
+  }
+
+  .footer-links {
+    margin-left: auto;
+    margin-top: 10px;
+  }
+  .social-links a,
+  .footer-links a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 15px;
+  }
+
+  .social-links a:hover,
+  .footer-links a:hover {
+    text-decoration: underline;
   }

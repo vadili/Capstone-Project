@@ -53,7 +53,27 @@ const DashBoard = () => {
                 </div>
             </main>
             <footer className="dashboard-footer">
-                <p>&copy; 2024 TechLive. All rights reserved.</p>
+                <div className="footer-info">
+                    <div className="address">
+                        <p>Contact Us:</p>
+                        <address>
+                            2983 Ocala Ct, San Jose, CA
+                            <br />
+                            Email: techlink@gmail.com
+                            <br />
+                            Phone: (806) 471-4304
+                        </address>
+                    </div>
+                    <div className="social-links">
+                        <a href="https://instagram.com">Instagram</a>
+                        <a href="https://linkedin.com">LinkedIn</a>
+                        <a href="https://facebook.com">Facebook</a>
+                    </div>
+                    <div className="footer-links">
+                        <a href="/privacy-policy">Privacy Policy</a>
+                        <a href="/terms-of-service">Terms of Service</a>
+                    </div>
+                </div>
             </footer>
         </div>
     );
