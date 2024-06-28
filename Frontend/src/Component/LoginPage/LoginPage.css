@@ -1,0 +1,38 @@
+.login-page {
+    text-align: center;
+    margin-top: 10%;
+  }
+
+  .login-page h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+
+  .login-page form {
+    margin-bottom: 20px;
+  }
+
+  .login-page form div {
+    margin-bottom: 15px;
+  }
+
+  .login-page label {
+    margin-right: 10px;
+  }
+
+  .login-page button {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+  }
+
+  .login-page p {
+    margin-top: 20px;
+  }
+
+  .login-page .signup-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+  }

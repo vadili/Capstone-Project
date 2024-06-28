@@ -1,0 +1,27 @@
+.signup-page {
+    text-align: center;
+    margin-top: 10%;
+  }
+
+  .signup-page h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+
+  .signup-page form {
+    margin-bottom: 20px;
+  }
+
+  .signup-page form div {
+    margin-bottom: 15px;
+  }
+
+  .signup-page label {
+    margin-right: 10px;
+  }
+
+  .signup-page button {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+  }

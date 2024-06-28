@@ -1,0 +1,20 @@
+.first-page {
+    text-align: center;
+    margin-top: 20%;
+  }
+
+  .first-page h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+  }
+
+  .first-page p {
+    font-size: 1.5em;
+    margin-bottom: 40px;
+  }
+
+  .first-page button {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+  }

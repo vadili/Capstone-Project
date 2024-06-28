@@ -10,9 +10,9 @@ Intern Director: [Carl Taylor]
 
 Peer(s): [Yao Li & Xichan Liu]
 
-GitHub Repository Link: [https://github.com/vadili?tab=repositories
+GitHub Repository Link: [https://github.com/vadili?tab=repositories]
 
-Docs link: https://docs.google.com/document/d/14sie1bPB0aDJwBRglfbTcDlu8tFEoHv7aqwpb_7YEHM/edit 
+Docs link: https://docs.google.com/document/d/14sie1bPB0aDJwBRglfbTcDlu8tFEoHv7aqwpb_7YEHM/edit
 
 Overview:[FindMe is an interactive app designed to bridge the gap between recruiters and college students from underrepresented backgrounds, lesser-known schools, and diverse genders. The app aims to provide these students with access to tech internships that they might not be aware of. Unlike typical professional networking platforms, FindMe facilitates direct communication between recruiters and students, ensuring more personalized and effective interactions.]
 
@@ -34,7 +34,7 @@ Questionnaire-Based Matching:
 
 Data Collection:
 
-Student Profiles: 
+Student Profiles:
 - Skills (Both hard and soft)
 - Academic achievements (e.g. GPA, major)
 - Career interests
@@ -44,7 +44,7 @@ Student Profiles:
 
 Recruiter Profiles:
 - Company
-- Desired candidate qualifications 
+- Desired candidate qualifications
 - Company Culture
 - Diversity initiatives
 
@@ -86,38 +86,38 @@ Motivation: Find talented college students for internships at their company.
 
 Student Persona 1:
 
-	Name: Valerie 
+	Name: Valerie
 	Location: San Jose, California, USA
 	Age: 19
 	Technology Access: Proficient with computers and frequently visits the website                      to search for internships.
-	Motivation: Valerie is a current sophomore computer science major  looking for summer internships related to software engineering. She wants to find internships in sync with her academic year and connect with recruiters. 
+	Motivation: Valerie is a current sophomore computer science major  looking for summer internships related to software engineering. She wants to find internships in sync with her academic year and connect with recruiters.
 
-Student Persona 2: 
+Student Persona 2:
 
 	Name: Favour
 	Location: Los Angeles, California, USA
 	Age: 21
-	Technology Access: Prefers to use a smartphone and uses the mobile app to access internships and websites. 
+	Technology Access: Prefers to use a smartphone and uses the mobile app to access internships and websites.
 	Motivation: Favour is a rising senior data science major  looking for summer internships related to data science. He wants to connect with recruiters and explore internships.
 
 User Stories
 
-Required: 
+Required:
 
 - As a student or recruiter, I can login.
 - As a student, I want to create a profile, so that I can showcase my skills and experiences to potential employers.
-- As a student, I want to search for internships, so I can find opportunities that match my interests. 
+- As a student, I want to search for internships, so I can find opportunities that match my interests.
 - As a student, I want to view internship details, so I can make informed decisions before applying.
 - As a student, I want to reach out to the recruiters of specific companies, so I can ask for more insight about the recruiting process.
-- As a student or recruiter, I want to view other people’s profiles. 
-- As a recruiter, I want to view student profiles, so I can reach out to the best fits. 
-- As a recruiter, I want to give students feedback about their resumes, so they can improve them  and apply for available positions at my company. 
+- As a student or recruiter, I want to view other people’s profiles.
+- As a recruiter, I want to view student profiles, so I can reach out to the best fits.
+- As a recruiter, I want to give students feedback about their resumes, so they can improve them  and apply for available positions at my company.
 
 Stretched/Optional:
 
 - As a student, I want to save internships and like internships boards, so I can come back to them later.
 - As a student, I want to be able to edit\delete my profile information.
-- As a student or recruiter, I want to get notifications of chat messages. 
+- As a student or recruiter, I want to get notifications of chat messages.
 
 Screen Archetypes
 
@@ -130,8 +130,8 @@ Screen Archetypes
 
 Data Model
 
-User: 
-- First Name 
+User:
+- First Name
 - Last Name
 - Email
 - School
@@ -143,22 +143,22 @@ Internship Listing:
 - Job title
 - Company name
 - Job summary
-- Job qualifications 
+- Job qualifications
 
 Navigation
 
 - Login/Sign up: Allow users to login in or sign up for an account
-- Home Screen: Displays a list of internships 
-- Profile Screen: Displays the user’s profile information 
+- Home Screen: Displays a list of internships
+- Profile Screen: Displays the user’s profile information
     - May allow users to edit or delete their profile information
 - About us Screen: Displays general information about the site
 - Contact Screen: Displays the contact information about the site
     - Details:
-         - Location 
+         - Location
          - Email
          - Phone Number
-- Chat Screen: Displays a list of people you  message and allows you to open their chats. 
-    - Messages appear instantly on both users’ screen upon sending 
+- Chat Screen: Displays a list of people you  message and allows you to open their chats.
+    - Messages appear instantly on both users’ screen upon sending
     - Messages are displayed with timestamps indicating when they are sent
 
 Database Integration: After extensive research, I've selected MongoDB as the database for my project due to its excellent integration with Node.js and its flexible document-based structure. MongoDB's ability to handle unstructured data, such as internship listings from diverse APIs, with ease and efficiency is particularly advantageous. It offers scalability through native support for horizontal scaling and a dynamic schema that facilitates rapid iteration. While PostgreSQL offers robust features like JSONB for efficient querying and ACID compliance for transactional integrity, MongoDB's strengths in scalability, schema flexibility, and performance for document-oriented data align more closely with the needs of my project. These considerations led me to choose MongoDB as the optimal database solution for ensuring both flexibility and performance in handling the project's data requirements.
@@ -172,8 +172,3 @@ Interesting Cursor Interaction: To enhance user experience, I will implement cus
 UI Component with Custom Visual Styling: The app will feature UI components with custom visual styling. For example, the profile card on the Profile Screen will have a unique design with rounded corners, shadow effects, and personalized color schemes based on user preferences. This component will be built using CSS and styled-components to ensure maintainability and scalability.
 
 Loading State: To handle loading states gracefully, I will implement loading spinners or skeleton screens. Whenever data is being fetched from the internships API or during login/signup processes, users will see a loading spinner or skeleton screen. These visual indicators will effectively communicate that content is loading, thereby enhancing the perceived performance of the app and keeping users informed about ongoing processes. This approach ensures a smoother user experience by reducing uncertainty and providing clear feedback during data retrieval and authentication operations.
-
-
-
-
-
