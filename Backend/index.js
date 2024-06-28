@@ -1,31 +1,37 @@
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 const prisma = new PrismaClient();
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
+app.use(cors());
 
 app.post('/signup', async (req, res) => {
     const {
-        userId, firstName, lastName, email, password, userType, school, gpa, major, gender,
+        firstName, lastName, email, password, confirmPassword, userType, school, gpa, major, gender,
         raceEthnicity, technicalSkills, previousInternships, company, companyCulture
     } = req.body;
+
+    if (password !== confirmPassword) {
+        return res.status(400).json({ error: 'Passwords do not match' });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
         const user = await prisma.user.create({
             data: {
-                userId,
                 firstName,
                 lastName,
                 email,
                 password: hashedPassword,
-                userType,
+                userType: userType,
                 school,
                 gpa,
                 major,

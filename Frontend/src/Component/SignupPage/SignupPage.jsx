@@ -1,21 +1,27 @@
 import React, { useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import './SignupPage.css';
 
 const SignupPage = () => {
     const [userType, setUserType] = useState('student');
+    const navigate = useNavigate()
     const [formData, setFormData] = useState({
-        userId: '',
         firstName: '',
         lastName: '',
         email: '',
         password: '',
         confirmPassword: '',
+        userType: 'student',
         school: '',
         gpa: '',
         major: '',
         gender: '',
         raceEthnicity: '',
-        technicalSkills: '',
+        technicalSkills: {
+            programmingLanguages: [],
+            frameworksLibraries: [],
+            databases: [],
+        },
         previousInternships: false,
         company: '',
         companyCulture: '',
@@ -23,15 +29,45 @@ const SignupPage = () => {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-
-        setFormData({
-            ...formData,
-            [name]: type === 'checkbox' ? checked : value,
-        });
+        if (name.startsWith('technicalSkills.')) {
+            const skillType = name.split('.')[1];
+            const newSkills = checked
+                ? [...formData.technicalSkills[skillType], value]
+                : formData.technicalSkills[skillType].filter(skill => skill !== value);
+            setFormData({
+                ...formData,
+                technicalSkills: {
+                    ...formData.technicalSkills,
+                    [skillType]: newSkills,
+                },
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: type === 'checkbox' ? checked : value,
+            });
+        }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        if (formData.password !== formData.confirmPassword) {
+            alert("Passwords do not match!!");
+            return;
+        }
+        try {
+            const response = await fetch('http://localhost:3001/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            const data = await response.json();
+            navigate('/dashboard')
+        } catch (error) {
+            console.error('Error signing up', error);
+        }
     };
 
     return (
@@ -74,7 +110,7 @@ const SignupPage = () => {
                         </div>
                         <div>
                             <label>GPA:</label>
-                            <select name="gpa" value={formData.gpa} onChange={handleChange} placeholder="Optional">
+                            <select name="gpa" value={formData.gpa} onChange={handleChange}>
                                 <option value="">Select GPA</option>
                                 <option value="3.5-4.0">3.5 - 4.0</option>
                                 <option value="3.0-3.49">3.0 - 3.49</option>
@@ -83,7 +119,6 @@ const SignupPage = () => {
                                 <option value="1.5-1.99">1.5 - 1.99</option>
                                 <option value="1.0-1.49">1.0 - 1.49</option>
                                 <option value="0.0-0.99">0.0 - 0.99</option>
-
                             </select>
                         </div>
                         <div>
@@ -96,9 +131,8 @@ const SignupPage = () => {
                                 <option value="cyberSecurity">Cyber Security</option>
                                 <option value="dataScience">Data Science</option>
                                 <option value="informationTechnology">Information Technology</option>
-                                <option value="softwareengineering">Software Engineering</option>
+                                <option value="softwareEngineering">Software Engineering</option>
                                 <option value="webDevelopment">Web Development</option>
-
                             </select>
                         </div>
                         <div>
@@ -114,13 +148,61 @@ const SignupPage = () => {
                             <label>Race/Ethnicity:</label>
                             <select name="raceEthnicity" value={formData.raceEthnicity} onChange={handleChange} required>
                                 <option value="">Select Race/Ethnicity</option>
-                                <option value="americanidianoralaskanative(nothispanicorlatino)">American Indian or Alaska Native(not Hispanic or Latino)</option>
-                                <option value="asian(nothispanicorlatino)">Asian(not Hispanic or Latino)</option>
-                                <option value="blackorafricanamerican(nothispanicorlatino)">Black or African American(not Hispanic or Latino)</option>
-                                <option value="hispanicorlatino">Hispanic or Latino</option>
+                                <option value="americanIndianOrAlaskaNativeNotHispanicOrLatino">American Indian or Alaska Native (not Hispanic or Latino)</option>
+                                <option value="asianNotHispanicOrLatino">Asian (not Hispanic or Latino)</option>
+                                <option value="blackOrAfricanAmericanNotHispanicOrLatino">Black or African American (not Hispanic or Latino)</option>
+                                <option value="hispanicOrLatino">Hispanic or Latino</option>
                                 <option value="white">White</option>
                                 <option value="other">Other</option>
                             </select>
+                        </div>
+                        <div>
+                            <label>Technical Skills:</label>
+                            <div>
+                                <h4>Programming Languages</h4>
+                                {['JavaScript', 'Python', 'Java', 'C++', 'C#', 'Ruby', 'PHP', 'Swift', 'Kotlin', 'TypeScript', 'Go', 'Rust', 'R', 'SQL', 'HTML/CSS'].map(skill => (
+                                    <label key={skill}>
+                                        <input
+                                            type="checkbox"
+                                            name="technicalSkills.programmingLanguages"
+                                            value={skill}
+                                            checked={formData.technicalSkills.programmingLanguages.includes(skill)}
+                                            onChange={handleChange}
+                                        />
+                                        {skill}
+                                    </label>
+                                ))}
+                            </div>
+                            <div>
+                                <h4>Frameworks and Libraries</h4>
+                                {['React', 'Angular', 'Vue.js', 'Django', 'Flask', 'Ruby on Rails', 'Spring Boot', 'Express.js', 'ASP.NET', 'TensorFlow', 'PyTorch'].map(skill => (
+                                    <label key={skill}>
+                                        <input
+                                            type="checkbox"
+                                            name="technicalSkills.frameworksLibraries"
+                                            value={skill}
+                                            checked={formData.technicalSkills.frameworksLibraries.includes(skill)}
+                                            onChange={handleChange}
+                                        />
+                                        {skill}
+                                    </label>
+                                ))}
+                            </div>
+                            <div>
+                                <h4>Databases</h4>
+                                {['MySQL', 'PostgreSQL', 'MongoDB', 'SQLite', 'Oracle', 'Microsoft SQL Server', 'Firebase'].map(skill => (
+                                    <label key={skill}>
+                                        <input
+                                            type="checkbox"
+                                            name="technicalSkills.databases"
+                                            value={skill}
+                                            checked={formData.technicalSkills.databases.includes(skill)}
+                                            onChange={handleChange}
+                                        />
+                                        {skill}
+                                    </label>
+                                ))}
+                            </div>
                         </div>
                         <div>
                             <label>
