@@ -1,12 +1,19 @@
 import React from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 
 const LoginPage = () => {
+    const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        navigate('/dashboard');
+    };
 
     return (
         <div className="login-page">
             <h2>Log in</h2>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div>
                     <label>Email:</label>
                     <input type="email" required />
@@ -18,7 +25,7 @@ const LoginPage = () => {
                 <button type="submit">Log in</button>
             </form>
             <p>Don't have an account?</p>
-            <button ><a href="/signup"> Sign up</a></button>
+            <button onClick={() => navigate('/signup')}>Sign Up</button>
         </div >
     );
 };
