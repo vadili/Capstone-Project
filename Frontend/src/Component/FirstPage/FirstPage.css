@@ -10,6 +10,7 @@
     font-size: 3em;
     margin: 0;
   }
+
 .first-page a {
     color: white;
 }
@@ -17,14 +18,8 @@
     font-size: 1.5em;
     margin: 0;
   }
-/*
-  .first-page button {
-    padding: 10px 20px;
-    font-size: 1em;
-    cursor: pointer;
-  } */
-   .button {
 
+.button {
     border-radius: 8px;
     border: 1px solid transparent;
     font-size: 1em;
@@ -44,8 +39,9 @@
   }
 
   .button:hover {
-    width: 200px; /* Adjust this value as needed */
-    padding: 10px 40px;}
+    width: 200px;
+    padding: 10px 40px;
+}
 
   .description {
     position: absolute;
