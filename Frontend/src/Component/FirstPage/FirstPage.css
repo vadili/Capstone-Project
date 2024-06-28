@@ -1,20 +1,64 @@
 .first-page {
     text-align: center;
-    margin-top: 20%;
+    height: 100vh;
+    width: 100vw;
+    position:relative;
+    background-color: rgb(147, 147, 213);
   }
 
   .first-page h1 {
     font-size: 3em;
-    margin-bottom: 20px;
+    margin: 0;
   }
-
+.first-page a {
+    color: white;
+}
   .first-page p {
     font-size: 1.5em;
-    margin-bottom: 40px;
+    margin: 0;
   }
-
+/*
   .first-page button {
     padding: 10px 20px;
     font-size: 1em;
     cursor: pointer;
+  } */
+   .button {
+
+    border-radius: 8px;
+    border: 1px solid transparent;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #1a1a1a;
+    color: white;
+    cursor: pointer;
+    transition: width 0.3s ease, padding 0.3s ease;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 10px 20px;
+    cursor: pointer;
+    width: 150px;
+    text-align: center;
+    display: inline-block;
+  }
+
+  .button:hover {
+    width: 200px; /* Adjust this value as needed */
+    padding: 10px 40px;}
+
+  .description {
+    position: absolute;
+    bottom: 0;
+    width: 100vw;
+    height: 28vh;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    background-color: white;
+    border-radius: 40px 40px 0 0;
+    border-top: solid 2px;
+    outline: 7px ridge darkgrey;
   }

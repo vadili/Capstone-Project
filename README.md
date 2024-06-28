@@ -1,6 +1,6 @@
 # Capstone-Project-FindME
 
-Project Title: [FINDME]
+Project Title: [TechLink]
 
 Intern: [Chikodili Valerie Okeke]
 
@@ -14,67 +14,30 @@ GitHub Repository Link: [https://github.com/vadili?tab=repositories]
 
 Docs link: https://docs.google.com/document/d/14sie1bPB0aDJwBRglfbTcDlu8tFEoHv7aqwpb_7YEHM/edit
 
-Overview:[FindMe is an interactive app designed to bridge the gap between recruiters and college students from underrepresented backgrounds, lesser-known schools, and diverse genders. The app aims to provide these students with access to tech internships that they might not be aware of. Unlike typical professional networking platforms, FindMe facilitates direct communication between recruiters and students, ensuring more personalized and effective interactions.]
+Overview:[TechLink is an interactive app designed to bridge the gap between recruiters and college students from underrepresented backgrounds, lesser-known schools, and diverse genders. The app aims to provide these students with access to tech internships that they might not be aware of. Unlike typical professional networking platforms, TechLink facilitates direct communication between recruiters and students, ensuring more personalized and effective interactions.]
 
 Category:[Social Networking]
 
-Story:[FindMe allows students to create detailed profiles highlighting their skills, experiences, and career interests. Recruiters can create profiles showcasing their companies, available positions, and desired candidate qualifications. The app's matching algorithm then suggests potential matches, facilitating direct communication between students and recruiters. This process helps students discover opportunities they might not have found on their own and enables recruiters to tap into a diverse talent pool.]
+Story:[TechLink allows students to create detailed profiles highlighting their skills, experiences, and career interests. Recruiters can create profiles showcasing their companies, available positions, and desired candidate qualifications. The app's searching capability then suggests potential matches, and the app facilitates direct communication between students and recruiters. This process helps students discover opportunities they might not have found on their own and enables recruiters to tap into a diverse talent pool.]
 
-Market:[FindMe targets college students in tech from underrepresented backgrounds and lesser-known schools, as well as recruiters looking to diversify their talent pools.]
+Market:[TechLink targets college students in tech from underrepresented backgrounds and lesser-known schools, as well as recruiters looking to diversify their talent pools.]
 
 Habit:[Users are likely to use the app regularly, especially during recruitment seasons. Students will frequently check for new opportunities and interactions with recruiters, while recruiters will use the app to discover and connect with potential candidates.]
 
-Scope:[Initially, FindMe will focus on providing a platform for profile creation and messaging between students and recruiters. The scope will include functionalities like login, account creation, profile management, and basic communication features. Advanced features like real-time chat with timestamp  and multimedia content sharing.]
+Scope:[TechLink's initial scope will focus on essential features like login, logout, and profile creation. These core functionalities will allow users to access the platform, create their profiles, and start building their presence. As we move beyond the MVP, we'll introduce more advanced features, such as keyword-based searching and real-time announcement. Some stretch goals include 1) real-time private chat, and 2) email subscriptions. By focusing on these additional features, we aim to enhance the user experience and provide more value to both students and recruiters on the platform.]
 
 FindMe Matching System Overview
 
 FindMe utilizes a machine learning algorithm to facilitate personalized and effective connections between students and recruiters. By leveraging comprehensive profiles and detailed questionnaires, the platform ensures that each match is tailored to the specific needs and preferences of both parties. Here's an in-depth look at how the system operates:
 
-Questionnaire-Based Matching:
-
-Data Collection:
-
-Student Profiles:
-- Skills (Both hard and soft)
-- Academic achievements (e.g. GPA, major)
-- Career interests
-- Personal Backgrounds
-- Extracurricular activities
-- Previous Internships or projects
-
-Recruiter Profiles:
-- Company
-- Desired candidate qualifications
-- Company Culture
-- Diversity initiatives
-
-Matching Criteria and Weighting
-
-- Skills and Qualifications: The matching algorithm aligns students' hard skills (e.g., technical competencies, software proficiency) and soft skills (e.g., communication, teamwork) with the job requirements specified by recruiters.
-
-- Experience and Achievements: Factors such as internships, projects, volunteer experiences, and academic achievements are considered to gauge a student's readiness and suitability for specific roles.
-
-- Cultural and Diversity Fit: The algorithm takes into account preferences related to company culture, values, and diversity initiatives to ensure that students' expectations align with recruiters' offerings.
-
-Benefits of FindMe's Matching Algorithm
-
-- Tailored Connections: The detailed profiles and questionnaires ensure that the matches are highly personalized, leading to more meaningful and productive connections between students and recruiters.
-
-- Enhanced Recruitment Outcomes: By aligning skills, experiences, and cultural fit, the platform increases the likelihood of successful hires and positive recruitment experiences.
-
-- Support for Diversity Initiatives: FindMe promotes opportunities for underrepresented groups and lesser-known schools, supporting diversity and inclusion within the recruitment process.
-
-By employing a machine learning algorithm and leveraging detailed data from both students and recruiters, FindMe creates a robust and efficient matching system that benefits all parties involved.
 
 Product Spec
 
-User Stories
-
 User Roles
 
-Student: A college student in the tech field  from an underrepresented college who is actively seeking internship opportunities .
+Student: A college student in the tech field from an underrepresented college who is actively seeking internship opportunities.
 
-Recruiter: A person from a company looking for talented students from underrepresented colleges to help diversify his company.
+Recruiter: An industry recruiter from a company looking to hire someone with skill sets and coming from an underrepresented background to diversify the company culture.
 
 User Personas
 
@@ -89,7 +52,7 @@ Student Persona 1:
 	Name: Valerie
 	Location: San Jose, California, USA
 	Age: 19
-	Technology Access: Proficient with computers and frequently visits the website                      to search for internships.
+	Technology Access: Proficient with computers and frequently visits the website to search for internships.
 	Motivation: Valerie is a current sophomore computer science major  looking for summer internships related to software engineering. She wants to find internships in sync with her academic year and connect with recruiters.
 
 Student Persona 2:
@@ -104,66 +67,120 @@ User Stories
 
 Required:
 
-- As a student or recruiter, I can login.
+- As a student, I can login.
 - As a student, I want to create a profile, so that I can showcase my skills and experiences to potential employers.
-- As a student, I want to search for internships, so I can find opportunities that match my interests.
+- As a student, I want to edit a profile or delete a profile
+- As a student, I want to filter for internships to find opportunities that fit my profile.
 - As a student, I want to view internship details, so I can make informed decisions before applying.
-- As a student, I want to reach out to the recruiters of specific companies, so I can ask for more insight about the recruiting process.
-- As a student or recruiter, I want to view other people’s profiles.
-- As a recruiter, I want to view student profiles, so I can reach out to the best fits.
-- As a recruiter, I want to give students feedback about their resumes, so they can improve them  and apply for available positions at my company.
+- As a student, I can receive real time announcements from the recruiters
+- As a student, I want to view other students’ or recruiters’ profiles.
+
 
 Stretched/Optional:
 
-- As a student, I want to save internships and like internships boards, so I can come back to them later.
-- As a student, I want to be able to edit\delete my profile information.
-- As a student or recruiter, I want to get notifications of chat messages.
+- As a student, I want to open a private chat room and send real-time messages to recruiters
+- As a student, I want to be able to subscribe and get emails from recruiters.
+
 
 Screen Archetypes
 
+- Login / Sign-up Screen
 - Home Screen
+	- Main page containing welcome messages
+	- (with contact section about the app at the footer)
+	- (stretch: if save internship feature is implemented, main page may contain the list of saved internship listings)
+	- Search bar
+	- Navigation bar (persisted across screens): profile icon, login/logout button, menu icon - dropdown, announcement icon
+- Internship Search Results Screen
+	- From the home screen, after input search keyword, the top K results are displayed in a list on the internship search results page based on document scores.
+- Internship Details Screen
+	- From the keyword search result, after clicking onto an internship listing, the details page is shown.
 - Profile Screen
-- About us Screen
-- Contact Screen
-- Chat Screen
+	- Contains logged-in user profile. Can be accessed via the navigation bar in home screen
+- Announcement Screen
+	- The recruiter can see the announcement creation screen; the students can see the announcement content after clicking on the notification icon in the top navigation bar.
 
 
 Data Model
 
-User:
-- First Name
-- Last Name
-- Email
-- School
-- Gender
-- Race/Ethnicity
+Student
 
-Internship Listing:
-- Job Id
-- Job title
-- Company name
-- Job summary
-- Job qualifications
+- User_id: string
+- First Name: string
+- Last Name: string
+- School: optional[string]
+- GPA: optional[string] (Dropdown)
+- Major: string (Dropdown)
+- Gender: string (Dropdown)
+- Race/Ethnicity: string (Dropdown)
+- Technical skills: string (Dropdown)
+- Previous Internships: optional[boolean]
+- cookie/token - session management for login/logout
+- User type - (1 if student, 0 if recruiter)
+
+Recruiter
+
+- User_id: string
+- First Name: string
+- Last Name: string
+- Company: optional[string]
+- Company Culture; optional[string]
+- User type - (1 if student, 0 if recruiter)
+
+Internship
+
+- Job Id: string
+- Job title: string
+- Company name: string
+- Job summary: string
+- Job qualifications : list[string]
+- Recruiter: string (user_id)
+
+Announcement
+
+- Sender: string (user_id)
+- Content
+- <other field>
+
+Server Endpoints
+
+- POST `/api/users/login` :Login user
+- POST `/api/users/signup`  :Sign up a new user
+- POST` /api/users/logout`: Logout user
+- PUT `/api/users/profile` :Updates a user’s profile information
+- POST `/api/users/internships` :Create a new internship listing
+- DELETE `/api/users/profile` :Deletes a user’s profile information
+- GET `/api/users/saved-jobs` :Retrieves a list of saved jobs
+- GET `/api/users/liked jobs` :Retrieves a list of liked jobs
+
 
 Navigation
 
 - Login/Sign up: Allow users to login in or sign up for an account
-- Home Screen: Displays a list of internships
+- Welcome /About us Screen: Display welcome message for the user and general information about the site
+	- Footer: Displays the contact information about the site
+		- Details:
+			- Location
+			- Email
+			- Phone Number
+- Search result screen: Displays a list of internships
 - Profile Screen: Displays the user’s profile information
-    - May allow users to edit or delete their profile information
-- About us Screen: Displays general information about the site
-- Contact Screen: Displays the contact information about the site
-    - Details:
-         - Location
-         - Email
-         - Phone Number
-- Chat Screen: Displays a list of people you  message and allows you to open their chats.
-    - Messages appear instantly on both users’ screen upon sending
-    - Messages are displayed with timestamps indicating when they are sent
+	- May allow users to edit or delete their profile information
+- Announcement Screen: Announcement shared by recruiters realtime
 
-Database Integration: After extensive research, I've selected MongoDB as the database for my project due to its excellent integration with Node.js and its flexible document-based structure. MongoDB's ability to handle unstructured data, such as internship listings from diverse APIs, with ease and efficiency is particularly advantageous. It offers scalability through native support for horizontal scaling and a dynamic schema that facilitates rapid iteration. While PostgreSQL offers robust features like JSONB for efficient querying and ACID compliance for transactional integrity, MongoDB's strengths in scalability, schema flexibility, and performance for document-oriented data align more closely with the needs of my project. These considerations led me to choose MongoDB as the optimal database solution for ensuring both flexibility and performance in handling the project's data requirements.
 
-External APIs: I will be integrating  internship APIs from platforms like RapidAPI and API list to import comprehensive internship listings into the app. These APIs offer a diverse selection of opportunities from various companies and locations, ensuring users have access to the latest and most relevant internship options. Specifically, I am exploring options such as the LinkedIn Jobs API and similar APIs available on platforms like RapidAPI and API lists
+
+Database Integration: I've chosen to use Prisma with PostgreSQL and Express for my project, following what I learned at CodePath. Prisma's seamless integration with PostgreSQL and its ORM capabilities will streamline database management. PostgreSQL's strong ACID compliance and JSONB support fit well for structured data handling in my project. This setup ensures both efficiency and scalability as the project progresses.
+
+External APIs: I will be integrating  internship APIs from platforms like RapidAPI and API list to import comprehensive internship listings into the app. These APIs offer a diverse selection of opportunities from various companies and locations, ensuring users have access to the latest and most relevant internship options. Specifically, I am exploring options such as the LinkedIn Jobs API and similar APIs available on platforms like RapidAPI and API lists.
+
+Authentication
+
+
+When users log into our app (POST `/api/users/login`), we check their credentials and issue a secure session token. This token is stored in an HTTP-only cookie, keeping it safe from any unauthorized access. It travels back and forth with each request, ensuring users stay authenticated as they navigate through different screens without needing to log in repeatedly.
+
+For new users signing up (POST `/api/users/signup`), we securely add their details to our system, making sure they can smoothly move around the app without interruptions. When it's time to log out (POST /api/users/logout), we clear these tokens to maintain privacy and security.
+
 
 Visuals and Interactions
 
