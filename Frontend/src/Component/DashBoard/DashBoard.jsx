@@ -27,7 +27,7 @@ const DashBoard = () => {
     return (
         <div className="dashboard">
             <header className="dashboard-header">
-                <div className="logo">TechLive</div>
+                <div className="logo">TechLink</div>
                 <nav className="nav-bar">
                     <div className="menu-icon">
                         <img src="/icons/menu.svg" alt="Menu" />
