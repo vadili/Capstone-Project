@@ -1,0 +1,66 @@
+.signup-page-step2 {
+  text-align: center;
+  margin-top: 10%;
+}
+
+.signup-page-step2 h2 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.signup-page-step2 form {
+  margin-bottom: 20px;
+}
+
+.signup-page-step2 form div {
+  margin-bottom: 15px;
+}
+
+.signup-page-step2 label {
+  margin-right: 10px;
+}
+
+.signup-page-step2 select,
+.signup-page-step2 input {
+  padding: 10px;
+  margin: 5px 0;
+  width: 100%;
+}
+
+.signup-page-step2 button {
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.dropdown-section {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-section button {
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  z-index: 1000;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.dropdown-menu label {
+  display: block;
+  padding: 5px 10px;
+}
+
+.dropdown-menu input {
+  margin-right: 10px;
+}
