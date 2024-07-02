@@ -76,73 +76,77 @@ const Profile = () => {
     };
 
     return (
-        <div className="profile">
-            <h1>Profile</h1>
-            {error && <p className="error-message">{error}</p>}
-            <div className="profile-container">
-                <div className="profile-field">
-                    <label>First Name:</label>
-                    <p>{formData.firstName}</p>
+        <div className='profile-container'>
+            <div className="profile">
+                <h1>Profile</h1>
+                {error && <p className="error-message">{error}</p>}
+                <div className="profile-fields">
+                    <div className="profile-field">
+                        <label>First Name:</label>
+                        <input type="text" value={formData.firstName} readOnly />
+                    </div>
+                    <div className="profile-field">
+                        <label>Last Name:</label>
+                        <input type="text" value={formData.lastName} readOnly />
+                    </div>
+                    <div className="profile-field">
+                        <label>Email:</label>
+                        <input type="email" value={formData.email} readOnly />
+                    </div>
+                    <div className="profile-field">
+                        <label>User Type:</label>
+                        <input type="text" value={formData.userType} readOnly />
+                    </div>
+                    {formData.userType === 'student' && (
+                        <>
+                            <div className="profile-field">
+                                <label>School:</label>
+                                <input type="text" value={formData.school} readOnly />
+                            </div>
+                            <div className="profile-field">
+                                <label>GPA:</label>
+                                <input type="text" value={formData.gpa} readOnly />
+                            </div>
+                            <div className="profile-field">
+                                <label>Major:</label>
+                                <input type="text" value={formData.major} readOnly />
+                            </div>
+                            <div className="profile-field">
+                                <label>Gender:</label>
+                                <input type="text" value={formData.gender} readOnly />
+                            </div>
+                            <div className="profile-field">
+                                <label>Race/Ethnicity:</label>
+                                <input type="text" value={formData.raceEthnicity} readOnly />
+                            </div>
+                            <div className="profile-field">
+                                <label>Technical Skills:</label>
+                                <input type="text" value={JSON.stringify(formData.technicalSkills)} readOnly />
+                            </div>
+                            <div className="profile-field">
+                                <label>Previous Internships:</label>
+                                <input type="text" value={formData.previousInternships} readOnly />
+                            </div>
+                        </>
+                    )}
+                    {formData.userType === 'recruiter' && (
+                        <>
+                            <div className="profile-field">
+                                <label>Company:</label>
+                                <input type="text" value={formData.company} readOnly />
+                            </div>
+                            <div className="profile-field">
+                                <label>Company Culture:</label>
+                                <input type="text" value={formData.companyCulture} readOnly />
+                            </div>
+                        </>
+                    )}
                 </div>
-                <div className="profile-field">
-                    <label>Last Name:</label>
-                    <p>{formData.lastName}</p>
+                <div className="button-group">
+                    <button onClick={() => navigate('/profile/edit')}>Edit Profile</button>
+                    <button onClick={handleDelete}>Delete Profile</button>
                 </div>
-                <div className="profile-field">
-                    <label>Email:</label>
-                    <p>{formData.email}</p>
-                </div>
-                <div className="profile-field">
-                    <label>User Type:</label>
-                    <p>{formData.userType}</p>
-                </div>
-                {formData.userType === 'student' && (
-                    <>
-                        <div className="profile-field">
-                            <label>School:</label>
-                            <p>{formData.school}</p>
-                        </div>
-                        <div className="profile-field">
-                            <label>GPA:</label>
-                            <p>{formData.gpa}</p>
-                        </div>
-                        <div className="profile-field">
-                            <label>Major:</label>
-                            <p>{formData.major}</p>
-                        </div>
-                        <div className="profile-field">
-                            <label>Gender:</label>
-                            <p>{formData.gender}</p>
-                        </div>
-                        <div className="profile-field">
-                            <label>Race/Ethnicity:</label>
-                            <p>{formData.raceEthnicity}</p>
-                        </div>
-                        <div className="profile-field">
-                            <label>Technical Skills:</label>
-                            <p>{JSON.stringify(formData.technicalSkills)}</p>
-                        </div>
-                        <div className="profile-field">
-                            <label>Previous Internships:</label>
-                            <p>{formData.previousInternships}</p>
-                        </div>
-                    </>
-                )}
-                {formData.userType === 'recruiter' && (
-                    <>
-                        <div className="profile-field">
-                            <label>Company:</label>
-                            <p>{formData.company}</p>
-                        </div>
-                        <div className="profile-field">
-                            <label>Company Culture:</label>
-                            <p>{formData.companyCulture}</p>
-                        </div>
-                    </>
-                )}
             </div>
-            <button onClick={() => navigate('/profile/edit')}>Edit Profile</button>
-            <button onClick={handleDelete}>Delete Profile</button>
         </div>
     );
 };

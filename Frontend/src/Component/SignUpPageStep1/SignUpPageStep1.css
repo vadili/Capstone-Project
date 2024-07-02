@@ -1,3 +1,11 @@
+.parent-signup-page-step1 {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .signup-page-step1 {
   text-align: center;
   margin-top: 10%;

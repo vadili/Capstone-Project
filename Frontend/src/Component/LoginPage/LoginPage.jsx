@@ -42,22 +42,24 @@ const LoginPage = () => {
 
 
     return (
-        <div className="login-page">
-            <h2>Log in</h2>
-            {error && <p className="error-message">{error}</p>}
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Email:</label>
-                    <input type="email" name="email" value={formData.email} onChange={handleChange} required />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input type="password" name="password" value={formData.password} onChange={handleChange} required />
-                </div>
-                <button type="submit">Log in</button>
-            </form>
-            <p>Don't have an account?</p>
-            <button onClick={() => navigate('/signup-step-1')}>Sign Up</button>
+        <div className='parent-login-page'>
+            <div className="login-page">
+                <h2>Log in</h2>
+                {error && <p className="error-message">{error}</p>}
+                <form onSubmit={handleSubmit}>
+                    <div>
+                        <label>Email:</label>
+                        <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+                    </div>
+                    <div>
+                        <label>Password:</label>
+                        <input type="password" name="password" value={formData.password} onChange={handleChange} required />
+                    </div>
+                    <button type="submit">Log in</button>
+                </form>
+                <p>Don't have an account?</p>
+                <button onClick={() => navigate('/signup-step-1')}>Sign Up</button>
+            </div>
         </div>
     );
 };

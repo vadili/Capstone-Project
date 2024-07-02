@@ -1,3 +1,8 @@
+.parent-edit-profile {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
 .edit-profile {
     max-width: 600px;
     margin: 0 auto;
