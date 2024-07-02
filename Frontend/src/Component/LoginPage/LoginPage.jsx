@@ -40,6 +40,7 @@ const LoginPage = () => {
         }
     };
 
+
     return (
         <div className="login-page">
             <h2>Log in</h2>

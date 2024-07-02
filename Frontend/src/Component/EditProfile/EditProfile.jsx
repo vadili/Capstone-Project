@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Profile.css';
+import './EditProfile.css';
 
-const Profile = () => {
+const EditProfile = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         firstName: '',
@@ -51,100 +51,115 @@ const Profile = () => {
         fetchProfile();
     }, []);
 
-    const handleDelete = async () => {
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         try {
             const token = localStorage.getItem('token');
             const response = await fetch('http://localhost:3001/api/user', {
-                method: 'DELETE',
+                method: 'PUT',
                 headers: {
                     'Authorization': token,
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify(formData)
             });
             if (response.ok) {
-                localStorage.removeItem('token');
-                navigate('/signup-step-1');
+                navigate('/profile');
             } else {
                 const errorData = await response.json();
-                setError(errorData.error || 'Delete failed');
-                console.error('Error deleting profile:', errorData);
+                setError(errorData.error || 'Update failed');
+                console.error('Error updating profile:', errorData);
             }
         } catch (error) {
             setError('An error occurred. Please try again.');
-            console.error('Error deleting profile:', error);
+            console.error('Error updating profile:', error);
         }
     };
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
-        <div className="profile">
-            <h1>Profile</h1>
+        <div className="edit-profile">
+            <h1>Edit Profile</h1>
             {error && <p className="error-message">{error}</p>}
-            <div className="profile-container">
-                <div className="profile-field">
+            <form onSubmit={handleSubmit}>
+                <div>
                     <label>First Name:</label>
-                    <p>{formData.firstName}</p>
+                    <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
                 </div>
-                <div className="profile-field">
+                <div>
                     <label>Last Name:</label>
-                    <p>{formData.lastName}</p>
+                    <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
                 </div>
-                <div className="profile-field">
+                <div>
                     <label>Email:</label>
-                    <p>{formData.email}</p>
+                    <input type="email" name="email" value={formData.email} onChange={handleChange} required />
                 </div>
-                <div className="profile-field">
+                <div>
                     <label>User Type:</label>
-                    <p>{formData.userType}</p>
+                    <select name="userType" value={formData.userType} onChange={handleChange}>
+                        <option value="student">Student</option>
+                        <option value="recruiter">Recruiter</option>
+                    </select>
                 </div>
                 {formData.userType === 'student' && (
                     <>
-                        <div className="profile-field">
+                        <div>
                             <label>School:</label>
-                            <p>{formData.school}</p>
+                            <input type="text" name="school" value={formData.school} onChange={handleChange} />
                         </div>
-                        <div className="profile-field">
+                        <div>
                             <label>GPA:</label>
-                            <p>{formData.gpa}</p>
+                            <input type="text" name="gpa" value={formData.gpa} onChange={handleChange} />
                         </div>
-                        <div className="profile-field">
+                        <div>
                             <label>Major:</label>
-                            <p>{formData.major}</p>
+                            <input type="text" name="major" value={formData.major} onChange={handleChange} />
                         </div>
-                        <div className="profile-field">
+                        <div>
                             <label>Gender:</label>
-                            <p>{formData.gender}</p>
+                            <input type="text" name="gender" value={formData.gender} onChange={handleChange} />
                         </div>
-                        <div className="profile-field">
+                        <div>
                             <label>Race/Ethnicity:</label>
-                            <p>{formData.raceEthnicity}</p>
+                            <input type="text" name="raceEthnicity" value={formData.raceEthnicity} onChange={handleChange} />
                         </div>
-                        <div className="profile-field">
+                        <div>
                             <label>Technical Skills:</label>
-                            <p>{JSON.stringify(formData.technicalSkills)}</p>
+                            <input type="text" name="technicalSkills" value={JSON.stringify(formData.technicalSkills)} onChange={handleChange} />
                         </div>
-                        <div className="profile-field">
+                        <div>
                             <label>Previous Internships:</label>
-                            <p>{formData.previousInternships}</p>
+                            <input type="text" name="previousInternships" value={formData.previousInternships} onChange={handleChange} />
                         </div>
                     </>
                 )}
                 {formData.userType === 'recruiter' && (
                     <>
-                        <div className="profile-field">
+                        <div>
                             <label>Company:</label>
-                            <p>{formData.company}</p>
+                            <input type="text" name="company" value={formData.company} onChange={handleChange} />
                         </div>
-                        <div className="profile-field">
+                        <div>
                             <label>Company Culture:</label>
-                            <p>{formData.companyCulture}</p>
+                            <input type="text" name="companyCulture" value={formData.companyCulture} onChange={handleChange} />
                         </div>
                     </>
                 )}
-            </div>
-            <button onClick={() => navigate('/profile/edit')}>Edit Profile</button>
-            <button onClick={handleDelete}>Delete Profile</button>
+                <button type="submit">Update Profile</button>
+            </form>
         </div>
     );
 };
 
-export default Profile;
+export default EditProfile;

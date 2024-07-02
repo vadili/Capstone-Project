@@ -6,6 +6,7 @@ import SignUpPageStep1 from './Component/SignUpPageStep1/SignUpPageStep1';
 import SignUpPageStep2 from './Component/SignUpPageStep2/SignUpPageStep2';
 import DashBoard from './Component/DashBoard/DashBoard';
 import Profile from './Component/Profile/Profile';
+import EditProfile from './Component/EditProfile/EditProfile';
 import './App.css'
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/signup-step-2" element={<SignUpPageStep2 />} />
         <Route path="/dashboard" element={<DashBoard />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/edit" element={<EditProfile />} />
       </Routes>
     </Router>
 

@@ -1,4 +1,4 @@
-.profile {
+.edit-profile {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
@@ -8,30 +8,26 @@
     background-color: #fff;
 }
 
-.profile h1 {
+.edit-profile h1 {
     text-align: center;
     margin-bottom: 20px;
 }
 
-.profile-container {
+.edit-profile form {
     display: flex;
     flex-direction: column;
 }
 
-.profile-field {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-
-.profile-field label {
+.edit-profile label {
     font-weight: bold;
 }
 
-.profile-field p {
-    margin-left: 10px;
-    flex: 1;
-    text-align: right;
+.edit-profile input,
+.edit-profile select {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 button {

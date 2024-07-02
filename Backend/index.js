@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const bodyParser = require('body-parser');
@@ -81,6 +82,44 @@ app.get('/api/user', authenticateToken, async (req, res) => {
     try {
         const user = await prisma.user.findUnique({ where: { id: req.user.userId } });
         res.json(user);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.put('/api/user', authenticateToken, async (req, res) => {
+    const { firstName, lastName, email, userType, school, gpa, major, gender, raceEthnicity, technicalSkills, previousInternships, company, companyCulture } = req.body;
+    try {
+        const user = await prisma.user.update({
+            where: { id: req.user.userId },
+            data: {
+                firstName,
+                lastName,
+                email,
+                userType,
+                school,
+                gpa,
+                major,
+                gender,
+                raceEthnicity,
+                technicalSkills,
+                previousInternships,
+                company,
+                companyCulture
+            }
+        });
+        res.json(user);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.delete('/api/user', authenticateToken, async (req, res) => {
+    try {
+        await prisma.user.delete({
+            where: { id: req.user.userId }
+        });
+        res.json({ message: 'User deleted successfully' });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
