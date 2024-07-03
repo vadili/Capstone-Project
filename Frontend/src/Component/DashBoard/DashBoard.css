@@ -1,16 +1,53 @@
 .dashboard {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100vh;
+  }
+
+  .fixed-header, .fixed-footer {
+    position: fixed;
+    width: 100%;
+    background: #fff;
+    padding: 10px;
+    text-align: center;
+    z-index: 1000;
+  }
+
+  .fixed-header {
+    top: 0;
+  }
+
+  .fixed-footer {
+    bottom: 0;
   }
 
   .main-content {
-    flex-grow: 1;
-    padding: 2rem;
+    flex: 1;
+    padding-top: 60px;
+    padding-bottom: 40px;
+    overflow-y: auto;
   }
 
-  .search-bar {
-    width: 100%;
-    padding: 0.5rem;
-    margin-top: 1rem;
+  .internships-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .internship-box {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    margin: 10px;
+    padding: 15px;
+    border-radius: 5px;
+    width: 300px;
+  }
+
+  .internship-box h3 {
+    margin-top: 0;
+  }
+
+  .internship-box a {
+    color: #007bff;
+    text-decoration: none;
   }

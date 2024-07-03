@@ -6,30 +6,24 @@ import Footer from '../Footer/Footer';
 
 const DashBoard = () => {
     const navigate = useNavigate();
-    const [firstName, setFirstName] = useState('');
+    const [internships, setInternships] = useState([]);
 
     useEffect(() => {
-        const fetchFirstName = async () => {
+        const fetchInternships = async () => {
             try {
-                const token = localStorage.getItem('token');
-                const response = await fetch('http://localhost:3001/api/user', {
-                    headers: {
-                        'Authorization': token,
-                        'Content-Type': 'application/json',
-                    }
-                });
+                const response = await fetch('http://localhost:3001/api/internships');
                 if (response.ok) {
                     const data = await response.json();
-                    setFirstName(data.firstName);
+                    setInternships(data);
                 } else {
-                    console.error('Error fetching user data:', response.statusText);
+                    console.error('Error fetching internships:', response.statusText);
                 }
             } catch (error) {
-                console.error('Error fetching user data:', error);
+                console.error('Error fetching internships:', error);
             }
         };
 
-        fetchFirstName();
+        fetchInternships();
     }, []);
 
     const handleLogout = () => {
@@ -41,9 +35,20 @@ const DashBoard = () => {
         <div className="dashboard">
             <Header />
             <main className="main-content">
-                <h1>Welcome to TechLink</h1>
-                <p>Hi, {firstName}!</p>
-                <p>You are one step closer to achieving your goals!</p>
+                <div className="internships-container">
+                    {internships.map((internship) => (
+                        <div key={internship.id} className="internship-box">
+                            <h3>{internship.title}</h3>
+                            <p><strong>Job Title:</strong> {internship.jobTitle}</p>
+                            <p><strong>Job Type:</strong> {internship.jobType}</p>
+                            <p><strong>Company:</strong> {internship.company}</p>
+                            <p><strong>Location:</strong> {internship.location}</p>
+                            <p><strong>Description:</strong> {internship.description}</p>
+                            <p><strong>Qualifications:</strong> {internship.qualifications}</p>
+                            <a href={internship.url} target="_blank" rel="noopener noreferrer">Apply Here</a>
+                        </div>
+                    ))}
+                </div>
             </main>
             <Footer />
         </div>

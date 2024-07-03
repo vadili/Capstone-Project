@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 
+
 const prisma = new PrismaClient();
 const app = express();
 const port = process.env.PORT || 3001;
@@ -85,6 +86,11 @@ app.get('/api/user', authenticateToken, async (req, res) => {
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
+});
+
+app.get('/api/internships', async (req, res) => {
+    const internships = await prisma.internship.findMany();
+    res.json(internships);
 });
 
 app.put('/api/user', authenticateToken, async (req, res) => {
