@@ -3,7 +3,6 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import './SignUpPageStep1.css';
 
 const SignUpPageStep1 = () => {
-    // const [userType, setUserType] = useState('student');
     const navigate = useNavigate()
     const [formData, setFormData] = useState({
         firstName: '',

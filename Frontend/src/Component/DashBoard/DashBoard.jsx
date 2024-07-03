@@ -42,7 +42,7 @@ const DashBoard = () => {
             <Header />
             <main className="main-content">
                 <h1>Welcome to TechLink</h1>
-                <p>Hi, {firstName}</p>
+                <p>Hi, {firstName}!</p>
                 <p>You are one step closer to achieving your goals!</p>
             </main>
             <Footer />

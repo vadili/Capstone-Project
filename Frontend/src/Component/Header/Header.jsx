@@ -13,14 +13,14 @@ const Header = () => {
     return (
         <header className="header">
             <div className="header-left">
-                <div className="logo" onClick={() => navigate('/')}>TechLive</div>
+                <div className="logo" onClick={() => navigate('/')}>TechLink</div>
                 <input type="text" placeholder="Search internships..." className="search-bar" />
             </div>
             <div className="nav-icons">
-                <img src="/path/to/profile-icon.png" alt="Profile" className="icon" onClick={() => navigate('/profile')} />
+                <i className="fa-solid fa-bars icon menu-icon"></i>
+                <i className="fa-solid fa-bell icon announcement-icon"></i>
+                <i className="fa-solid fa-user icon profile-icon" onClick={() => navigate('/profile')}></i>
                 <button className="logout-button" onClick={handleLogout}>Logout</button>
-                <img src="/path/to/menu-icon.png" alt="Menu" className="icon" />
-                <img src="/path/to/announcement-icon.png" alt="Announcements" className="icon" />
             </div>
         </header>
     );

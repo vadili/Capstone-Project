@@ -43,14 +43,14 @@ app.post('/signup', async (req, res) => {
                 lastName,
                 email,
                 password: hashedPassword,
-                userType: userType,
+                userType,
                 school,
                 gpa,
                 major,
                 gender,
                 raceEthnicity,
                 technicalSkills,
-                previousInternships,
+                previousInternships: previousInternships || null,
                 company,
                 companyCulture
             }
@@ -88,7 +88,9 @@ app.get('/api/user', authenticateToken, async (req, res) => {
 });
 
 app.put('/api/user', authenticateToken, async (req, res) => {
-    const { firstName, lastName, email, userType, school, gpa, major, gender, raceEthnicity, technicalSkills, previousInternships, company, companyCulture } = req.body;
+    const {
+        firstName, lastName, email, userType, school, gpa, major, gender, raceEthnicity, technicalSkills, previousInternships, company, companyCulture
+    } = req.body;
     try {
         const user = await prisma.user.update({
             where: { id: req.user.userId },

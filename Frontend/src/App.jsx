@@ -7,6 +7,8 @@ import SignUpPageStep2 from './Component/SignUpPageStep2/SignUpPageStep2';
 import DashBoard from './Component/DashBoard/DashBoard';
 import Profile from './Component/Profile/Profile';
 import EditProfile from './Component/EditProfile/EditProfile';
+import Header from './Component/Header/Header';
+import Footer from './Component/Footer/Footer';
 import './App.css'
 
 const PrivateRoute = ({ component: Component, ...rest }) => (

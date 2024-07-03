@@ -56,6 +56,11 @@ const SignUpPageStep2 = () => {
                     [skillType]: newSkills,
                 },
             });
+        } else if (type === 'checkbox') {
+            setFormData({
+                ...formData,
+                [name]: checked,
+            });
         } else {
             setFormData({
                 ...formData,
@@ -69,8 +74,8 @@ const SignUpPageStep2 = () => {
         e.preventDefault();
         const parsedFormData = {
             ...formData,
-            previousInternships: formData.previousInternships ? parseInt(formData.previousInternships, 10) : null,
-            technicalSkills: JSON.stringify(formData.technicalSkills),  // Ensure it's JSON
+            previousInternships: formData.previousInternships ? true : false,
+            technicalSkills: JSON.stringify(formData.technicalSkills),
             school: formData.school || null,
             gpa: formData.gpa || null,
             major: formData.major || null,
@@ -88,6 +93,8 @@ const SignUpPageStep2 = () => {
                 body: JSON.stringify(parsedFormData)
             });
             if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('token', `Bearer ${data.token}`);
                 navigate('/dashboard');
             } else {
                 const errorData = await response.json();
@@ -241,7 +248,6 @@ const SignUpPageStep2 = () => {
                         </>
                     )}
                     <button type="submit">Sign Up</button>
-                    {/* <button className="button"> <a href="/signup-step-2">Sign Up</a></button> */}
                 </form>
             </div>
         </div>

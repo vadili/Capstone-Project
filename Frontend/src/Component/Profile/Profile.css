@@ -1,5 +1,6 @@
 .profile-container {
     width: 100vw;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -30,16 +31,20 @@
 
 .profile-field {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 10px;
 }
 
 .profile-field label {
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-right: 10px;
 }
 
-.profile-field input {
+.profile-field p {
+    flex: 1;
+    text-align: left;
+    margin: 0;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
