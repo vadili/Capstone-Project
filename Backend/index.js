@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 
+
 const prisma = new PrismaClient();
 const app = express();
 const port = process.env.PORT || 3001;
@@ -43,14 +44,14 @@ app.post('/signup', async (req, res) => {
                 lastName,
                 email,
                 password: hashedPassword,
-                userType: userType,
+                userType,
                 school,
                 gpa,
                 major,
                 gender,
                 raceEthnicity,
                 technicalSkills,
-                previousInternships,
+                previousInternships: previousInternships || null,
                 company,
                 companyCulture
             }
@@ -87,8 +88,15 @@ app.get('/api/user', authenticateToken, async (req, res) => {
     }
 });
 
+app.get('/api/internships', async (req, res) => {
+    const internships = await prisma.internship.findMany();
+    res.json(internships);
+});
+
 app.put('/api/user', authenticateToken, async (req, res) => {
-    const { firstName, lastName, email, userType, school, gpa, major, gender, raceEthnicity, technicalSkills, previousInternships, company, companyCulture } = req.body;
+    const {
+        firstName, lastName, email, userType, school, gpa, major, gender, raceEthnicity, technicalSkills, previousInternships, company, companyCulture
+    } = req.body;
     try {
         const user = await prisma.user.update({
             where: { id: req.user.userId },

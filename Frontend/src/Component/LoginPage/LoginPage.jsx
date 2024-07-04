@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 
-const LoginPage = () => {
+const LoginPage = ({ setUser }) => {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -30,7 +30,8 @@ const LoginPage = () => {
                 const data = await response.json();
                 localStorage.setItem('token', `Bearer ${data.token}`);
                 localStorage.setItem('user', JSON.stringify(data.user));
-                navigate('/dashboard');
+                setUser(data.user);
+                navigate('/welcome', { state: { firstName: data.user.firstName } });
             } else {
                 const errorData = await response.json();
                 setError(errorData.error || 'Login failed');
@@ -39,7 +40,6 @@ const LoginPage = () => {
             setError('An error occurred. Please try again.');
         }
     };
-
 
     return (
         <div className='parent-login-page'>

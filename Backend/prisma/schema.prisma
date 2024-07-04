@@ -30,3 +30,24 @@ model User {
   company             String?
   companyCulture      String?
 }
+
+model Internship {
+  id             Int      @id @default(autoincrement())
+  title          String
+  jobTitle       String
+  jobType        String
+  company        String
+  location       String
+  description    String
+  qualifications String
+  url            String
+  postedAt       DateTime
+}
+
+model Recruiter {
+  id        Int    @id @default(autoincrement())
+  firstName String
+  lastName  String
+  company   String
+  email     String
+}

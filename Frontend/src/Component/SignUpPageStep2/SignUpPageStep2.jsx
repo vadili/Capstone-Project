@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './SignUpPageStep2.css'
+import './SignUpPageStep2.css';
 
-const SignUpPageStep2 = () => {
-    const navigate = useNavigate()
-    const location = useLocation()
+const SignUpPageStep2 = ({ setUser }) => {
+    const navigate = useNavigate();
+    const location = useLocation();
     const initialFormData = location.state?.formData || {};
     const [formData, setFormData] = useState({
         ...initialFormData,
@@ -28,6 +28,7 @@ const SignUpPageStep2 = () => {
         frameworksLibraries: false,
         databases: false,
     });
+    const [error, setError] = useState('');
 
     useEffect(() => {
         if (!location.state?.formData) {
@@ -56,21 +57,26 @@ const SignUpPageStep2 = () => {
                     [skillType]: newSkills,
                 },
             });
+        } else if (type === 'checkbox') {
+            setFormData({
+                ...formData,
+                [name]: checked,
+            });
         } else {
             setFormData({
                 ...formData,
                 [name]: value,
             });
         }
-        console.log('Form Data:', formData);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(''); // Clear previous errors
         const parsedFormData = {
             ...formData,
-            previousInternships: formData.previousInternships ? parseInt(formData.previousInternships, 10) : null,
-            technicalSkills: JSON.stringify(formData.technicalSkills),  // Ensure it's JSON
+            previousInternships: formData.previousInternships ? true : false,
+            technicalSkills: JSON.stringify(formData.technicalSkills),
             school: formData.school || null,
             gpa: formData.gpa || null,
             major: formData.major || null,
@@ -79,6 +85,7 @@ const SignUpPageStep2 = () => {
             company: formData.company || null,
             companyCulture: formData.companyCulture || null,
         };
+        console.log("Submitting form data:", parsedFormData); // Add log here
         try {
             const response = await fetch('http://localhost:3001/signup', {
                 method: 'POST',
@@ -87,14 +94,26 @@ const SignUpPageStep2 = () => {
                 },
                 body: JSON.stringify(parsedFormData)
             });
+            console.log("Server response:", response); // Add log here
             if (response.ok) {
-                navigate('/dashboard');
+                const data = await response.json();
+                console.log("Signup successful, data received:", data); // Add log here
+                localStorage.setItem('token', `Bearer ${data.token}`);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                setUser(data.user);
+                navigate('/welcome', { state: { firstName: data.user.firstName } }); // Pass first name
             } else {
                 const errorData = await response.json();
                 console.error('Signup failed:', errorData);
+                if (errorData.error.includes('Unique constraint failed on the fields: (`email`)')) {
+                    setError('Email already in use. Please use a different email.');
+                } else {
+                    setError('Signup failed. Please try again.');
+                }
             }
         } catch (error) {
             console.error('Error signing up', error);
+            setError('Error signing up. Please try again.');
         }
     };
 
@@ -102,6 +121,7 @@ const SignUpPageStep2 = () => {
         <div className='parent-signup-page-step2'>
             <div className="signup-page-step2">
                 <h2>Sign Up - Step 2</h2>
+                {error && <p className="error-message">{error}</p>}
                 <form onSubmit={handleSubmit}>
                     {formData.userType === 'student' && (
                         <>
@@ -241,7 +261,6 @@ const SignUpPageStep2 = () => {
                         </>
                     )}
                     <button type="submit">Sign Up</button>
-                    {/* <button className="button"> <a href="/signup-step-2">Sign Up</a></button> */}
                 </form>
             </div>
         </div>
