@@ -1,4 +1,4 @@
-# Capstone-Project-FindME
+# Capstone-Project-TechLink
 
 Project Title: [TechLink]
 
