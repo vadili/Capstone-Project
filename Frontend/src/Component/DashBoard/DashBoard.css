@@ -1,11 +1,9 @@
 .dashboard {
     display: flex;
     flex-direction: column;
-    height: 100vh;
   }
 
   .fixed-header, .fixed-footer {
-    position: fixed;
     width: 100%;
     background: #fff;
     padding: 10px;
@@ -15,16 +13,18 @@
 
   .fixed-header {
     top: 0;
+    height: 60px;
   }
 
   .fixed-footer {
     bottom: 0;
+    height: 60px;
   }
 
   .main-content {
     flex: 1;
     padding-top: 60px;
-    padding-bottom: 40px;
+    padding-bottom: 60px;
     overflow-y: auto;
   }
 
@@ -32,6 +32,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    padding: 10px;
   }
 
   .internship-box {
@@ -40,7 +41,7 @@
     margin: 10px;
     padding: 15px;
     border-radius: 5px;
-    width: 300px;
+    width: 100%;
   }
 
   .internship-box h3 {
@@ -48,6 +49,6 @@
   }
 
   .internship-box a {
-    color: #007bff;
+    color: pink;
     text-decoration: none;
   }

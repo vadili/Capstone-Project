@@ -44,3 +44,26 @@
     cursor: pointer;
     margin-left: 20px;
 }
+
+.dropdown-menu {
+    position: absolute;
+    top: 60px;
+    display: flex;
+    justify-content: flex-end;
+    right: 10px;
+    background-color: white;
+    border: 0px solid #ccc;
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.dropdown-menu div {
+    padding: 10px;
+    cursor: pointer;
+    border: 1px solid;
+    padding-right: 70px;
+}
+
+.dropdown-menu div:hover {
+    background-color: #f0f0f0;
+}

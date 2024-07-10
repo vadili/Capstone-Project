@@ -28,6 +28,7 @@ const SignUpPageStep2 = ({ setUser }) => {
         frameworksLibraries: false,
         databases: false,
     });
+
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -72,10 +73,10 @@ const SignUpPageStep2 = ({ setUser }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(''); // Clear previous errors
+        setError('');
         const parsedFormData = {
             ...formData,
-            previousInternships: formData.previousInternships ? true : false,
+            previousInternships: formData.previousInternships ? parseInt(formData.previousInternships) : null,
             technicalSkills: JSON.stringify(formData.technicalSkills),
             school: formData.school || null,
             gpa: formData.gpa || null,
@@ -85,7 +86,6 @@ const SignUpPageStep2 = ({ setUser }) => {
             company: formData.company || null,
             companyCulture: formData.companyCulture || null,
         };
-        console.log("Submitting form data:", parsedFormData); // Add log here
         try {
             const response = await fetch('http://localhost:3001/signup', {
                 method: 'POST',
@@ -94,22 +94,16 @@ const SignUpPageStep2 = ({ setUser }) => {
                 },
                 body: JSON.stringify(parsedFormData)
             });
-            console.log("Server response:", response); // Add log here
             if (response.ok) {
                 const data = await response.json();
-                console.log("Signup successful, data received:", data); // Add log here
                 localStorage.setItem('token', `Bearer ${data.token}`);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 setUser(data.user);
-                navigate('/welcome', { state: { firstName: data.user.firstName } }); // Pass first name
+                navigate('/welcome', { state: { firstName: data.firstName } });
             } else {
                 const errorData = await response.json();
                 console.error('Signup failed:', errorData);
-                if (errorData.error.includes('Unique constraint failed on the fields: (`email`)')) {
-                    setError('Email already in use. Please use a different email.');
-                } else {
-                    setError('Signup failed. Please try again.');
-                }
+                setError(errorData.error || 'Signup failed. Please try again.');
             }
         } catch (error) {
             console.error('Error signing up', error);
@@ -133,48 +127,48 @@ const SignUpPageStep2 = ({ setUser }) => {
                                 <label>GPA:</label>
                                 <select name="gpa" value={formData.gpa} onChange={handleChange}>
                                     <option value="">Select GPA</option>
-                                    <option value="3.5-4.0">3.5 - 4.0</option>
-                                    <option value="3.0-3.49">3.0 - 3.49</option>
-                                    <option value="2.5-2.99">2.5 - 2.99</option>
-                                    <option value="2.0-2.49">2.0 - 2.49</option>
-                                    <option value="1.5-1.99">1.5 - 1.99</option>
-                                    <option value="1.0-1.49">1.0 - 1.49</option>
-                                    <option value="0.0-0.99">0.0 - 0.99</option>
+                                    <option value="3.5 - 4.0">3.5 - 4.0</option>
+                                    <option value="3.0 - 3.49">3.0 - 3.49</option>
+                                    <option value="2.5 - 2.99">2.5 - 2.99</option>
+                                    <option value="2.0 - 2.49">2.0 - 2.49</option>
+                                    <option value="1.5 - 1.99">1.5 - 1.99</option>
+                                    <option value="1.0 - 1.49">1.0 - 1.49</option>
+                                    <option value="0.0 - 0.99">0.0 - 0.99</option>
                                 </select>
                             </div>
                             <div>
                                 <label>Major:</label>
                                 <select name="major" value={formData.major} onChange={handleChange} required>
                                     <option value="">Select Major</option>
-                                    <option value="artificialIntelligence">Artificial Intelligence</option>
-                                    <option value="computerScience">Computer Science</option>
-                                    <option value="computerEngineering">Computer Engineering</option>
-                                    <option value="cyberSecurity">Cyber Security</option>
-                                    <option value="dataScience">Data Science</option>
-                                    <option value="informationTechnology">Information Technology</option>
-                                    <option value="softwareEngineering">Software Engineering</option>
-                                    <option value="webDevelopment">Web Development</option>
+                                    <option value="Artificial Intelligence">Artificial Intelligence</option>
+                                    <option value="Computer Science">Computer Science</option>
+                                    <option value="Computer Engineering">Computer Engineering</option>
+                                    <option value="CyberSecurity">Cyber Security</option>
+                                    <option value="Data Science">Data Science</option>
+                                    <option value="Information Technology">Information Technology</option>
+                                    <option value="Software Engineering">Software Engineering</option>
+                                    <option value="Web Development">Web Development</option>
                                 </select>
                             </div>
                             <div>
                                 <label>Gender:</label>
                                 <select name="gender" value={formData.gender} onChange={handleChange} required>
                                     <option value="">Select Gender</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                    <option value="other">Other</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
                             <div>
                                 <label>Race/Ethnicity:</label>
                                 <select name="raceEthnicity" value={formData.raceEthnicity} onChange={handleChange} required>
                                     <option value="">Select Race/Ethnicity</option>
-                                    <option value="americanIndianOrAlaskaNativeNotHispanicOrLatino">American Indian or Alaska Native (not Hispanic or Latino)</option>
-                                    <option value="asianNotHispanicOrLatino">Asian (not Hispanic or Latino)</option>
-                                    <option value="blackOrAfricanAmericanNotHispanicOrLatino">Black or African American (not Hispanic or Latino)</option>
-                                    <option value="hispanicOrLatino">Hispanic or Latino</option>
-                                    <option value="white">White</option>
-                                    <option value="other">Other</option>
+                                    <option value="American Indian Or Alaska Native (not Hispanic Or Latino)">American Indian or Alaska Native (not Hispanic or Latino)</option>
+                                    <option value="Asian (not Hispanic Or Latino)">Asian (not Hispanic or Latino)</option>
+                                    <option value="Black Or African American (not Hispanic Or Latino)">Black or African American (not Hispanic or Latino)</option>
+                                    <option value="Hispanic Or Latino">Hispanic or Latino</option>
+                                    <option value="White">White</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
                             <div>

@@ -8,14 +8,14 @@
 .footer-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 5px;
 }
 
 .footer-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 20px;
+    padding-bottom: 5px;
 }
 
 .footer-left h2 {
@@ -35,7 +35,7 @@
 }
 
 .footer-middle {
-    padding: 20px 0;
+    padding: 0px 0;
     display: flex;
     justify-content: flex-end;
     flex-wrap: wrap;
