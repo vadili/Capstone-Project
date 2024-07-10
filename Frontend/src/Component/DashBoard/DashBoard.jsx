@@ -8,6 +8,8 @@ const DashBoard = () => {
     const navigate = useNavigate();
     const [internships, setInternships] = useState([]);
     const [visibleInternships, setVisibleInternships] = useState(5);
+    const [notifications, setNotifications] = useState([]);
+    const [unreadCount, setUnreadCount] = useState(0);
 
     useEffect(() => {
         const fetchInternships = async () => {
@@ -24,11 +26,46 @@ const DashBoard = () => {
             }
         };
 
+        const fetchNotifications = async () => {
+            try {
+                const response = await fetch('http://localhost:3001/api/notifications', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setNotifications(data);
+                    setUnreadCount(data.length);
+                } else {
+                    console.error('Error fetching notifications:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching notifications:', error);
+            }
+        };
+
         fetchInternships();
+        fetchNotifications();
     }, []);
 
     const loadMore = () => {
         setVisibleInternships((prevVisibleInternships) => prevVisibleInternships + 5);
+    };
+
+    const handleNotificationClick = async (notificationId) => {
+        try {
+            await fetch(`http://localhost:3001/api/notifications/${notificationId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            setNotifications(notifications.filter(notification => notification.id !== notificationId));
+            setUnreadCount(unreadCount - 1);
+        } catch (error) {
+            console.error('Error updating notification:', error);
+        }
     };
 
     return (
