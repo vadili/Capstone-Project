@@ -3,7 +3,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function fetchInternships() {
-    const response = await fetch('https://jobs-api19.p.rapidapi.com/jobs', {
+    const response = await fetch('https://jobs-api19.p.rapidapi.com/jobs?limit=100', {
         method: 'GET',
         headers: {
             'X-RapidAPI-Key': 'c3a93bdf12msh044a4433f9b5e76p120876jsnc4884cc19b72',
@@ -15,17 +15,13 @@ async function fetchInternships() {
         const errorData = await response.json();
         throw new Error(`API error: ${errorData.message}`);
     }
-
     const data = await response.json();
-    console.log('API response data:', data);
-
-    return data; // Directly return the data as it's an array of jobs
+    return data;
 }
 
 async function saveInternships() {
     try {
         const internships = await fetchInternships();
-        console.log('Internships data:', internships);
 
         if (!Array.isArray(internships)) {
             console.error('Error: internships is not an array');
@@ -33,8 +29,23 @@ async function saveInternships() {
         }
 
         for (const job of internships) {
-            await prisma.internship.create({
-                data: {
+            await prisma.internship.upsert({
+                where: {
+                    title_company: {
+                        title: job.title,
+                        company: job.company
+                    }
+                },
+                update: {
+                    jobTitle: job.job_title,
+                    jobType: job.job_type,
+                    location: job.location,
+                    description: job.job_description,
+                    qualifications: job.education_and_skills,
+                    url: job.apply_link,
+                    postedAt: new Date(job.posted_date)
+                },
+                create: {
                     title: job.title,
                     jobTitle: job.job_title,
                     jobType: job.job_type,
@@ -47,7 +58,6 @@ async function saveInternships() {
                 }
             });
         }
-        console.log('Internships saved successfully');
     } catch (error) {
         console.error(error);
     }

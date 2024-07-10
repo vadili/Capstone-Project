@@ -7,6 +7,7 @@ import Footer from '../Footer/Footer';
 const DashBoard = () => {
     const navigate = useNavigate();
     const [internships, setInternships] = useState([]);
+    const [visibleInternships, setVisibleInternships] = useState(5);
 
     useEffect(() => {
         const fetchInternships = async () => {
@@ -26,9 +27,8 @@ const DashBoard = () => {
         fetchInternships();
     }, []);
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        navigate('/login');
+    const loadMore = () => {
+        setVisibleInternships((prevVisibleInternships) => prevVisibleInternships + 5);
     };
 
     return (
@@ -36,7 +36,7 @@ const DashBoard = () => {
             <Header />
             <main className="main-content">
                 <div className="internships-container">
-                    {internships.map((internship) => (
+                    {internships.slice(0, visibleInternships).map((internship) => (
                         <div key={internship.id} className="internship-box">
                             <h3>{internship.title}</h3>
                             <p><strong>Job Title:</strong> {internship.jobTitle}</p>
@@ -49,6 +49,11 @@ const DashBoard = () => {
                         </div>
                     ))}
                 </div>
+                {visibleInternships < internships.length && (
+                    <button onClick={loadMore} className="load-more">
+                        Load More
+                    </button>
+                )}
             </main>
             <Footer />
         </div>

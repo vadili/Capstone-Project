@@ -5,11 +5,18 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
-
+const http = require('http');
+const { Server } = require('socket.io');
 
 const prisma = new PrismaClient();
 const app = express();
 const port = process.env.PORT || 3001;
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: '*',
+    },
+});
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -24,6 +31,16 @@ const authenticateToken = (req, res, next) => {
         next();
     });
 };
+
+io.on('connection', (socket) => {
+
+    socket.on('newAnnouncement', (announcement) => {
+        io.emit('announcement', announcement);
+    });
+
+    socket.on('disconnect', () => {
+    });
+});
 
 app.post('/signup', async (req, res) => {
     const {
@@ -50,7 +67,7 @@ app.post('/signup', async (req, res) => {
                 major,
                 gender,
                 raceEthnicity,
-                technicalSkills,
+                technicalSkills: JSON.parse(technicalSkills),
                 previousInternships: previousInternships || null,
                 company,
                 companyCulture
@@ -58,6 +75,7 @@ app.post('/signup', async (req, res) => {
         });
         res.status(201).json(user);
     } catch (error) {
+        console.error("Error during user creation:", error);
         res.status(400).json({ error: error.message });
     }
 });
@@ -111,7 +129,7 @@ app.put('/api/user', authenticateToken, async (req, res) => {
                 gender,
                 raceEthnicity,
                 technicalSkills,
-                previousInternships,
+                previousInternships: previousInternships !== null ? parseInt(previousInternships) : null,
                 company,
                 companyCulture
             }
@@ -133,6 +151,56 @@ app.delete('/api/user', authenticateToken, async (req, res) => {
     }
 });
 
-app.listen(port, () => {
+app.post('/api/notifications', authenticateToken, async (req, res) => {
+    const { content } = req.body;
+
+    try {
+        const users = await prisma.user.findMany({
+            where: { userType: 'student' }
+        });
+
+        const notifications = users.map(user => {
+            return prisma.notification.create({
+                data: {
+                    content,
+                    userId: user.id
+                }
+            });
+        });
+
+        await Promise.all(notifications);
+
+        io.emit('announcement', content);
+        res.status(201).json({ message: 'Notification sent to all students' });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.get('/api/notifications', authenticateToken, async (req, res) => {
+    try {
+        const notifications = await prisma.notification.findMany({
+            where: { userId: req.user.userId, isRead: false }
+        });
+        res.json(notifications);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.put('/api/notifications/:id', authenticateToken, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const notification = await prisma.notification.update({
+            where: { id: parseInt(id) },
+            data: { isRead: true }
+        });
+        res.json(notification);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

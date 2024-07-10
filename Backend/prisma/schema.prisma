@@ -14,10 +14,10 @@ generator client {
 }
 
 model User {
-  id                  Int     @id @default(autoincrement())
+  id                  Int            @id @default(autoincrement())
   firstName           String
   lastName            String
-  email               String  @unique
+  email               String         @unique
   password            String
   userType            String
   school              String?
@@ -29,6 +29,7 @@ model User {
   previousInternships Int?
   company             String?
   companyCulture      String?
+  notifications       Notification[]
 }
 
 model Internship {
@@ -42,6 +43,8 @@ model Internship {
   qualifications String
   url            String
   postedAt       DateTime
+
+  @@unique([title, company])
 }
 
 model Recruiter {
@@ -50,4 +53,13 @@ model Recruiter {
   lastName  String
   company   String
   email     String
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  isRead    Boolean  @default(false)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
 }

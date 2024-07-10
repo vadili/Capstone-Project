@@ -8,6 +8,7 @@ import DashBoard from './Component/DashBoard/DashBoard';
 import Profile from './Component/Profile/Profile';
 import EditProfile from './Component/EditProfile/EditProfile';
 import Welcome from './Component/Welcome/Welcome';
+import CreateInternship from './Component/CreateInternship/CreateInternship';
 import './App.css';
 
 const PrivateRoute = ({ children }) => {
@@ -65,6 +66,14 @@ function App() {
           element={
             <PrivateRoute>
               <EditProfile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/create-internship"
+          element={
+            <PrivateRoute>
+              <CreateInternship />
             </PrivateRoute>
           }
         />

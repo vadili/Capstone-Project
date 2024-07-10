@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Profile.css';
+import Header from '../Header/Header';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -14,7 +15,11 @@ const Profile = () => {
         major: '',
         gender: '',
         raceEthnicity: '',
-        technicalSkills: {},
+        technicalSkills: {
+            programmingLanguages: [],
+            frameworksLibraries: [],
+            databases: []
+        },
         previousInternships: '',
         company: '',
         companyCulture: ''
@@ -75,11 +80,26 @@ const Profile = () => {
         }
     };
 
+    const formatTechnicalSkills = (skills) => {
+        const {
+            programmingLanguages = [],
+            frameworksLibraries = [],
+            databases = []
+        } = skills;
+        const allSkills = [
+            ...programmingLanguages,
+            ...frameworksLibraries,
+            ...databases
+        ];
+        return allSkills.join(', ');
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
 
-    return (
+    return (<>
+        <Header />
         <div className='profile-container'>
             <div className="profile">
                 <h1>Profile</h1>
@@ -125,7 +145,7 @@ const Profile = () => {
                             </div>
                             <div className="profile-field">
                                 <label>Technical Skills:</label>
-                                <p>{JSON.stringify(formData.technicalSkills)}</p>
+                                <p>{formatTechnicalSkills(formData.technicalSkills)}</p>
                             </div>
                             <div className="profile-field">
                                 <label>Previous Internships:</label>
@@ -152,6 +172,7 @@ const Profile = () => {
                 </div>
             </div>
         </div>
+    </>
     );
 };
 

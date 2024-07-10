@@ -2,6 +2,7 @@ import React from 'react';
 import './Footer.css';
 
 const Footer = () => {
+
     return (
         <footer className="footer">
             <div className="footer-container">
@@ -37,7 +38,7 @@ const Footer = () => {
                     <p>© 2024 TechLink. All rights reserved.</p>
                 </div>
             </div>
-        </footer>
+        </footer >
     );
 };
 
