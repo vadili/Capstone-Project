@@ -22,6 +22,37 @@ const EditProfile = () => {
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [dropdownOpen, setDropdownOpen] = useState({
+        programmingLanguages: false,
+        frameworksLibraries: false,
+        databases: false
+    });
+
+    const toggleDropdown = (section) => {
+        setDropdownOpen(prevState => ({
+            ...prevState,
+            [section]: !prevState[section]
+        }));
+    };
+
+    const handleChange = (e) => {
+        const { name, value, checked } = e.target;
+        const [mainKey, subKey] = name.split('.');
+
+        setFormData(prevState => {
+            const updatedSkills = checked
+                ? [...(prevState.technicalSkills[subKey] || []), value]
+                : prevState.technicalSkills[subKey].filter(skill => skill !== value);
+
+            return {
+                ...prevState,
+                technicalSkills: {
+                    ...prevState.technicalSkills,
+                    [subKey]: updatedSkills
+                }
+            };
+        });
+    };
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -52,7 +83,7 @@ const EditProfile = () => {
         fetchProfile();
     }, []);
 
-    const handleChange = (e) => {
+    const handleDefaultChange = (e) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
@@ -99,19 +130,19 @@ const EditProfile = () => {
                     <form onSubmit={handleSubmit}>
                         <div>
                             <label>First Name:</label>
-                            <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
+                            <input type="text" name="firstName" value={formData.firstName} onChange={handleDefaultChange} required />
                         </div>
                         <div>
                             <label>Last Name:</label>
-                            <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
+                            <input type="text" name="lastName" value={formData.lastName} onChange={handleDefaultChange} required />
                         </div>
                         <div>
                             <label>Email:</label>
-                            <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+                            <input type="email" name="email" value={formData.email} onChange={handleDefaultChange} required />
                         </div>
                         <div>
                             <label>User Type:</label>
-                            <select name="userType" value={formData.userType} onChange={handleChange}>
+                            <select name="userType" value={formData.userType} onChange={handleDefaultChange}>
                                 <option value="student">Student</option>
                                 <option value="recruiter">Recruiter</option>
                             </select>
@@ -120,31 +151,87 @@ const EditProfile = () => {
                             <>
                                 <div>
                                     <label>School:</label>
-                                    <input type="text" name="school" value={formData.school} onChange={handleChange} />
+                                    <input type="text" name="school" value={formData.school} onChange={handleDefaultChange} />
                                 </div>
                                 <div>
                                     <label>GPA:</label>
-                                    <input type="text" name="gpa" value={formData.gpa} onChange={handleChange} />
+                                    <input type="text" name="gpa" value={formData.gpa} onChange={handleDefaultChange} />
                                 </div>
                                 <div>
                                     <label>Major:</label>
-                                    <input type="text" name="major" value={formData.major} onChange={handleChange} />
+                                    <input type="text" name="major" value={formData.major} onChange={handleDefaultChange} />
                                 </div>
                                 <div>
                                     <label>Gender:</label>
-                                    <input type="text" name="gender" value={formData.gender} onChange={handleChange} />
+                                    <input type="text" name="gender" value={formData.gender} onChange={handleDefaultChange} />
                                 </div>
                                 <div>
                                     <label>Race/Ethnicity:</label>
-                                    <input type="text" name="raceEthnicity" value={formData.raceEthnicity} onChange={handleChange} />
+                                    <input type="text" name="raceEthnicity" value={formData.raceEthnicity} onChange={handleDefaultChange} />
                                 </div>
                                 <div>
                                     <label>Technical Skills:</label>
-                                    <input type="text" name="technicalSkills" value={JSON.stringify(formData.technicalSkills)} onChange={handleChange} />
+                                    <div className="dropdown-section">
+                                        <button type="button" onClick={() => toggleDropdown('programmingLanguages')}>Programming Languages</button>
+                                        {dropdownOpen.programmingLanguages && (
+                                            <div className="dropdown-menu">
+                                                {['JavaScript', 'Python', 'Java', 'C++', 'C#', 'Ruby', 'PHP', 'Swift', 'Kotlin', 'TypeScript', 'Go', 'Rust', 'R', 'SQL', 'HTML/CSS'].map(skill => (
+                                                    <label key={skill}>
+                                                        <input
+                                                            type="checkbox"
+                                                            name={`technicalSkills.programmingLanguages`}
+                                                            value={skill}
+                                                            checked={formData.technicalSkills.programmingLanguages.includes(skill)}
+                                                            onChange={handleChange}
+                                                        />
+                                                        {skill}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="dropdown-section">
+                                        <button type="button" onClick={() => toggleDropdown('frameworksLibraries')}>Frameworks and Libraries</button>
+                                        {dropdownOpen.frameworksLibraries && (
+                                            <div className="dropdown-menu">
+                                                {['React', 'Angular', 'Vue.js', 'Django', 'Flask', 'Ruby on Rails', 'Spring Boot', 'Express.js', 'ASP.NET', 'TensorFlow', 'PyTorch'].map(skill => (
+                                                    <label key={skill}>
+                                                        <input
+                                                            type="checkbox"
+                                                            name={`technicalSkills.frameworksLibraries`}
+                                                            value={skill}
+                                                            checked={formData.technicalSkills.frameworksLibraries.includes(skill)}
+                                                            onChange={handleChange}
+                                                        />
+                                                        {skill}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="dropdown-section">
+                                        <button type="button" onClick={() => toggleDropdown('databases')}>Databases</button>
+                                        {dropdownOpen.databases && (
+                                            <div className="dropdown-menu">
+                                                {['MySQL', 'PostgreSQL', 'MongoDB', 'SQLite', 'Oracle', 'Microsoft SQL Server', 'Firebase'].map(skill => (
+                                                    <label key={skill}>
+                                                        <input
+                                                            type="checkbox"
+                                                            name={`technicalSkills.databases`}
+                                                            value={skill}
+                                                            checked={formData.technicalSkills.databases.includes(skill)}
+                                                            onChange={handleChange}
+                                                        />
+                                                        {skill}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                                 <div>
                                     <label>Previous Internships:</label>
-                                    <input type="text" name="previousInternships" value={formData.previousInternships} onChange={handleChange} />
+                                    <input type="text" name="previousInternships" value={formData.previousInternships} onChange={handleDefaultChange} />
                                 </div>
                             </>
                         )}
@@ -152,11 +239,11 @@ const EditProfile = () => {
                             <>
                                 <div>
                                     <label>Company:</label>
-                                    <input type="text" name="company" value={formData.company} onChange={handleChange} />
+                                    <input type="text" name="company" value={formData.company} onChange={handleDefaultChange} />
                                 </div>
                                 <div>
                                     <label>Company Culture:</label>
-                                    <input type="text" name="companyCulture" value={formData.companyCulture} onChange={handleChange} />
+                                    <input type="text" name="companyCulture" value={formData.companyCulture} onChange={handleDefaultChange} />
                                 </div>
                             </>
                         )}
