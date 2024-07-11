@@ -58,3 +58,22 @@ button:hover {
     text-align: center;
     margin-bottom: 10px;
 }
+.dropdown-section {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-section button {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+  }
+
+  .dropdown-menu label {
+    display: block;
+    padding: 5px 10px;
+  }
+
+  .dropdown-menu input {
+    margin-right: 10px;
+  }

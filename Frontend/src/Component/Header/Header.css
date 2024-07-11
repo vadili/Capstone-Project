@@ -11,6 +11,10 @@
     align-items: center;
 }
 
+.dropdown-container{
+    background-color: white;
+}
+
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
@@ -51,20 +55,20 @@
     display: flex;
     justify-content: flex-end;
     right: 10px;
-    background-color: white;
+    background-color: transparent;
     border: 0px solid #ccc;
     border-radius: 4px;
     z-index: 1000;
 }
 
-.dropdown-menu div {
+.dropdown-item {
     padding: 10px;
     cursor: pointer;
     border: 1px solid;
     padding-right: 70px;
 }
 
-.dropdown-menu div:hover {
+.dropdown-item:hover {
     background-color: #f0f0f0;
 }
 

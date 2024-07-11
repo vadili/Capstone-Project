@@ -99,7 +99,7 @@ const SignUpPageStep2 = ({ setUser }) => {
                 localStorage.setItem('token', `Bearer ${data.token}`);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 setUser(data.user);
-                navigate('/welcome', { state: { firstName: data.firstName } });
+                navigate('/welcome', { state: { firstName: data.user.firstName } });
             } else {
                 const errorData = await response.json();
                 console.error('Signup failed:', errorData);

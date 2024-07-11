@@ -42,7 +42,6 @@ io.on('connection', (socket) => {
 app.use(bodyParser.json());
 app.use(cors());
 
-
 app.post('/api/internships', authenticateToken, async (req, res) => {
     const { jobTitle, jobType, company, location, description, qualifications } = req.body;
 
@@ -144,7 +143,8 @@ app.post('/signup', async (req, res) => {
                 companyCulture
             }
         });
-        res.status(201).json(user);
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.status(201).json({ token, user });
     } catch (error) {
         console.error("Error during user creation:", error);
         res.status(400).json({ error: error.message });
