@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Header.css';
 
-const Header = () => {
+const Header = ({ showSavedInternships, showLikedInternships }) => {
     const navigate = useNavigate();
     const [showMenu, setShowMenu] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
@@ -48,6 +48,8 @@ const Header = () => {
                 <i className="fa-solid fa-bars icon menu-icon" onClick={toggleMenu}></i>
                 {showMenu && (
                     <div className="dropdown-menu">
+                        <div onClick={showSavedInternships}>Saved Internships</div>
+                        <div onClick={showLikedInternships}>Liked Internships</div>
                         <div onClick={() => navigate('/create-internship')}>Create New Internship</div>
                     </div>
                 )}

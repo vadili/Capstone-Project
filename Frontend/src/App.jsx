@@ -9,6 +9,7 @@ import Profile from './Component/Profile/Profile';
 import EditProfile from './Component/EditProfile/EditProfile';
 import Welcome from './Component/Welcome/Welcome';
 import CreateInternship from './Component/CreateInternship/CreateInternship';
+import SavedLikedInternships from './Component/SavedLikedInternships/SavedLikedInternships';
 import './App.css';
 
 const PrivateRoute = ({ children }) => {
@@ -74,6 +75,22 @@ function App() {
           element={
             <PrivateRoute>
               <CreateInternship />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/saved-internships"
+          element={
+            <PrivateRoute>
+              <SavedLikedInternships type="saved" />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/liked-internships"
+          element={
+            <PrivateRoute>
+              <SavedLikedInternships type="liked" />
             </PrivateRoute>
           }
         />
