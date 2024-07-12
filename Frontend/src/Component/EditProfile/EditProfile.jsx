@@ -20,6 +20,7 @@ const EditProfile = () => {
         company: '',
         companyCulture: ''
     });
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [dropdownOpen, setDropdownOpen] = useState({
