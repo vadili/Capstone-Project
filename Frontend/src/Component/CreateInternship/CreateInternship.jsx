@@ -24,13 +24,14 @@ const CreateInternship = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem('token');
+        const authToken = (token.split(' ')[1]);
 
         try {
             const response = await fetch('http://localhost:3001/api/internships', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${authToken}`
                 },
                 body: JSON.stringify(formData)
             });
@@ -42,7 +43,7 @@ const CreateInternship = () => {
                 console.error('Error creating internship:', errorData);
             }
         } catch (error) {
-            console.error('Error creating internship:', error);
+            console.log('Error creating internship:', error.error);
         }
     };
 

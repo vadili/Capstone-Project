@@ -14,6 +14,7 @@ const DashBoard = () => {
     const [savedInternships, setSavedInternships] = useState([]);
     const [likedInternships, setLikedInternships] = useState([]);
     const [displayedInternships, setDisplayedInternships] = useState([]);
+    const [searchTer, setSearchTerm] = useState('');
 
     useEffect(() => {
         const fetchInternships = async () => {
@@ -34,8 +35,9 @@ const DashBoard = () => {
         const fetchUserData = async () => {
             try {
                 const response = await fetch('http://localhost:3001/api/user', {
+                    method: "GET",
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        'Authorization': `${localStorage.getItem('token')}`
                     }
                 });
                 if (response.ok) {
@@ -54,7 +56,7 @@ const DashBoard = () => {
             try {
                 const response = await fetch('http://localhost:3001/api/notifications', {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        'Authorization': `${localStorage.getItem('token')}`
                     }
                 });
                 if (response.ok) {
@@ -83,7 +85,7 @@ const DashBoard = () => {
             await fetch(`http://localhost:3001/api/notifications/${notificationId}`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `${localStorage.getItem('token')}`
                 }
             });
             setNotifications(notifications.filter(notification => notification.id !== notificationId));
@@ -98,7 +100,7 @@ const DashBoard = () => {
             await fetch(`http://localhost:3001/api/internships/${id}/save`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `${localStorage.getItem('token')}`
                 }
             });
             setSavedInternships([...savedInternships, id]);
@@ -112,7 +114,7 @@ const DashBoard = () => {
             await fetch(`http://localhost:3001/api/internships/${id}/like`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `${localStorage.getItem('token')}`
                 }
             });
             setLikedInternships([...likedInternships, id]);
@@ -120,6 +122,7 @@ const DashBoard = () => {
             console.error('Error liking internship:', error);
         }
     };
+
     const showSavedInternships = () => {
         navigate('/saved-internships');
     };
@@ -132,6 +135,9 @@ const DashBoard = () => {
         <div className="dashboard">
             <Header showSavedInternships={showSavedInternships} showLikedInternships={showLikedInternships} />
             <main className="main-content">
+                <div className="search-bar">
+                    <input type="text" placeholder="Search internships..." className="search-bar" />
+                </div>
                 <div className="internships-container">
                     {internships.slice(0, visibleInternships).map((internship) => {
                         const isSaved = savedInternships.includes(internship.id);

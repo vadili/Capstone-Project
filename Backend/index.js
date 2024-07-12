@@ -43,20 +43,32 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.post('/api/internships', authenticateToken, async (req, res) => {
-    const { jobTitle, jobType, company, location, description, qualifications } = req.body;
-
+    const { title, jobTitle, jobType, company, location, description, qualifications, url } = req.body;
     try {
         const newInternship = await prisma.internship.create({
             data: {
+                title,
                 jobTitle,
                 jobType,
                 company,
                 location,
                 description,
                 qualifications,
+                url,
                 postedAt: new Date()
             }
         });
+
+        const students = await prisma.user.findMany({
+            where: { userType: 'student' }
+        })
+
+        await Promise.all(students.map(student => prisma.notification.create({
+            data: {
+                content: `New internship created: ${jobTitle} at ${company}`,
+                userId: student.id
+            }
+        })));
 
         io.emit('announcement', `New internship created: ${jobTitle} at ${company}`);
         res.status(201).json(newInternship);
@@ -143,7 +155,7 @@ app.post('/signup', async (req, res) => {
                 companyCulture
             }
         });
-        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '4h' });
         res.status(201).json({ token, user });
     } catch (error) {
         console.error("Error during user creation:", error);
@@ -161,7 +173,7 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '4h' });
         res.json({ token, user });
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -237,7 +249,7 @@ app.post('/api/notifications', authenticateToken, async (req, res) => {
         await Promise.all(notifications);
 
         io.emit('announcement', content);
-        res.status(201).json({ message: 'Notification sent to all students' });
+        res.status(201).json({ message: 'Notification sent to all students', notifactions: notifications });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -263,6 +275,19 @@ app.put('/api/notifications/:id', authenticateToken, async (req, res) => {
         });
         res.json(notification);
     } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.delete('/api/notifications/:id', authenticateToken, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const notification = await prisma.notification.delete({
+            where: { id: parseInt(id) }
+        });
+        res.status(204).send();
+    } catch (error) {
+        console.error("Error deleting notification:", error);
         res.status(400).json({ error: error.message });
     }
 });

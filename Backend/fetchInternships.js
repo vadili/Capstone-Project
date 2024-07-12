@@ -37,6 +37,7 @@ async function saveInternships() {
                     }
                 },
                 update: {
+                    title: job.title,
                     jobTitle: job.job_title,
                     jobType: job.job_type,
                     location: job.location,
