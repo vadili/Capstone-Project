@@ -13,7 +13,7 @@
   }
 
 .first-page a {
-    color: white;
+    color: rgb(147, 147, 213);
 }
 
   .first-page p {
@@ -27,7 +27,7 @@
     font-size: 1em;
     font-weight: 500;
     font-family: inherit;
-    background-color: #1a1a1a;
+    background-color: rgb(233, 223, 223);
     color: white;
     cursor: pointer;
     transition: width 0.3s ease, padding 0.3s ease;
@@ -43,6 +43,7 @@
   .button:hover {
     width: 200px;
     padding: 10px 40px;
+    background-color:pink !important;
 }
 
   .description {

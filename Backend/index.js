@@ -42,9 +42,81 @@ io.on('connection', (socket) => {
 app.use(bodyParser.json());
 app.use(cors());
 
+app.post('/signup', async (req, res) => {
+    const {
+        firstName, lastName, email, password, confirmPassword, userType, school, gpa, major, gender,
+        raceEthnicity, technicalSkills, previousInternships, company, companyCulture
+    } = req.body;
+
+    if (password !== confirmPassword) {
+        return res.status(400).json({ error: 'Passwords do not match' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    try {
+        const user = await prisma.user.create({
+            data: {
+                firstName,
+                lastName,
+                email,
+                password: hashedPassword,
+                userType,
+                school,
+                gpa,
+                major,
+                gender,
+                raceEthnicity,
+                technicalSkills: JSON.parse(technicalSkills),
+                previousInternships: previousInternships || null,
+                company,
+                companyCulture
+            }
+        });
+
+        if (userType === 'recruiter') {
+            await prisma.recruiter.create({
+                data: {
+                    firstName,
+                    lastName,
+                    email,
+                    company
+                }
+            });
+        }
+
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '4h' });
+        res.status(201).json({ token, user });
+    } catch (error) {
+        console.error("Error during user creation:", error);
+        res.status(400).json({ error: error.message });
+    }
+});
+
 app.post('/api/internships', authenticateToken, async (req, res) => {
     const { title, jobTitle, jobType, company, location, description, qualifications, url } = req.body;
     try {
+
+        const user = await prisma.user.findUnique({
+            where: { id: req.user.userId }
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        if (user.userType !== 'recruiter') {
+            return res.status(403).json({ error: 'User is not authorized to create internships' });
+        }
+
+        const recruiter = await prisma.recruiter.findUnique({
+            where: { email: user.email }
+        });
+
+        if (!recruiter) {
+            return res.status(404).json({ error: 'Recruiter not found' });
+        }
+
         const newInternship = await prisma.internship.create({
             data: {
                 title,
@@ -55,7 +127,8 @@ app.post('/api/internships', authenticateToken, async (req, res) => {
                 description,
                 qualifications,
                 url,
-                postedAt: new Date()
+                postedAt: new Date(),
+                recruiterId: recruiter.id
             }
         });
 
@@ -124,44 +197,6 @@ app.post('/api/internships/:id/like', authenticateToken, async (req, res) => {
     }
 });
 
-app.post('/signup', async (req, res) => {
-    const {
-        firstName, lastName, email, password, confirmPassword, userType, school, gpa, major, gender,
-        raceEthnicity, technicalSkills, previousInternships, company, companyCulture
-    } = req.body;
-
-    if (password !== confirmPassword) {
-        return res.status(400).json({ error: 'Passwords do not match' });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    try {
-        const user = await prisma.user.create({
-            data: {
-                firstName,
-                lastName,
-                email,
-                password: hashedPassword,
-                userType,
-                school,
-                gpa,
-                major,
-                gender,
-                raceEthnicity,
-                technicalSkills: JSON.parse(technicalSkills),
-                previousInternships: previousInternships || null,
-                company,
-                companyCulture
-            }
-        });
-        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '4h' });
-        res.status(201).json({ token, user });
-    } catch (error) {
-        console.error("Error during user creation:", error);
-        res.status(400).json({ error: error.message });
-    }
-});
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
@@ -288,6 +323,27 @@ app.delete('/api/notifications/:id', authenticateToken, async (req, res) => {
         res.status(204).send();
     } catch (error) {
         console.error("Error deleting notification:", error);
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.get('/api/recruiter/internships/:email', async (req, res) => {
+    const { email } = req.params
+    try {
+        const recruiter = await prisma.recruiter.findUnique({
+            where: { email: email }
+        });
+
+
+        if (!recruiter) {
+            return res.status(404).json({ error: 'Recruiter not found' });
+        }
+        const internships = await prisma.internship.findMany({
+            where: { recruiterId: parseInt(recruiter.id) }
+        });
+
+        res.json(internships);
+    } catch (error) {
         res.status(400).json({ error: error.message });
     }
 });

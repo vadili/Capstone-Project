@@ -100,7 +100,7 @@ const Profile = () => {
 
     return (<>
         <Header />
-        <div className='profile-container'>
+        <div className='container'>
             <div className="profile">
                 <h1>Profile</h1>
                 {error && <p className="error-message">{error}</p>}
