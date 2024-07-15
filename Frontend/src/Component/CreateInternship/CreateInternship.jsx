@@ -43,7 +43,6 @@ const CreateInternship = () => {
                 console.error('Error creating internship:', errorData);
             }
         } catch (error) {
-            console.log('Error creating internship:', error.error);
         }
     };
 

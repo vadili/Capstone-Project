@@ -1,39 +1,33 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model User {
   id                  Int            @id @default(autoincrement())
-  firstName           String
-  lastName            String
   email               String         @unique
   password            String
-  userType            String
-  school              String?
-  gpa                 String?
-  major               String?
-  gender              String?
-  raceEthnicity       String?
-  technicalSkills     Json
-  previousInternships Int?
   company             String?
   companyCulture      String?
+  firstName           String
+  gender              String?
+  gpa                 String?
+  lastName            String
+  major               String?
+  raceEthnicity       String?
+  school              String?
+  userType            String
+  technicalSkills     Json
+  previousInternships Int?
   notifications       Notification[]
 }
 
 model Internship {
-  id             Int      @id @default(autoincrement())
+  id             Int        @id @default(autoincrement())
   title          String
   jobTitle       String
   jobType        String
@@ -43,16 +37,19 @@ model Internship {
   qualifications String
   url            String
   postedAt       DateTime
+  recruiterId    Int?       @unique
+  recruiter      Recruiter? @relation(fields: [recruiterId], references: [id], name: "RecruiterInternships")
 
   @@unique([title, company])
 }
 
 model Recruiter {
-  id        Int    @id @default(autoincrement())
-  firstName String
-  lastName  String
-  company   String
-  email     String
+  id          Int          @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  company     String
+  email       String       @unique
+  internships Internship[] @relation("RecruiterInternships")
 }
 
 model Notification {
