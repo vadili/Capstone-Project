@@ -1,6 +1,6 @@
-.saved-liked-internships {
+/* .saved-liked-internships {
     padding: 20px;
-}
+} */
 
 .main-content {
     padding: 20px;
@@ -29,4 +29,10 @@
 
 .icons .fa-icon:hover {
     color: #007BFF;
+}
+
+.footer-styling {
+    position: fixed;
+    width: 100vw;
+    bottom: 0;
 }

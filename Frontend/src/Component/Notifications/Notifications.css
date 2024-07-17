@@ -6,40 +6,38 @@ body {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    text-align: center;
 }
 
 .notifications-container h2 {
-    text-align: center;
     margin-bottom: 20px;
     color: #333;
 }
 
 .notifications-container p {
-    text-align: center;
     color: #777;
 }
 
-.notifications-container ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.notifications-container li {
+.notification-cards {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #f9f9f9;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.notification-card {
+    background: #f9f9f9;
     border: 1px solid #ddd;
+    margin: 10px;
+    padding: 15px;
     border-radius: 5px;
+    width: 100%;
 }
 
-.notifications-container li:nth-child(even) {
-    background-color: #f1f1f1;
+.notification-card h3 {
+    margin-top: 0;
 }
 
-.notifications-container button {
+.notification-card button {
     background-color: #007bff;
     color: white;
     border: none;
@@ -48,17 +46,17 @@ body {
     cursor: pointer;
 }
 
-.notifications-container button:hover {
+.notification-card button:hover {
     background-color: #0056b3;
 }
 
 @media (max-width: 600px) {
-    .notifications-container li {
+    .notification-card {
         flex-direction: column;
         align-items: flex-start;
     }
 
-    .notifications-container button {
+    .notification-card button {
         margin-top: 10px;
     }
 }

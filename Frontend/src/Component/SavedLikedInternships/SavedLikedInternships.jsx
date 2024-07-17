@@ -11,17 +11,18 @@ const SavedLikedInternships = ({ type }) => {
     useEffect(() => {
         const fetchInternships = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/api/user`, {
+                const response = await fetch('http://localhost:3001/api/user', {
+                    method: "GET",
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        'Authorization': `${localStorage.getItem('token')}`
                     }
                 });
                 if (response.ok) {
                     const data = await response.json();
                     if (type === 'saved') {
-                        setInternships(data.savedInternships);
+                        setInternships(data.savedInternships || []);
                     } else if (type === 'liked') {
-                        setInternships(data.likedInternships);
+                        setInternships(data.likedInternships || []);
                     }
                 } else {
                     console.error('Error fetching internships:', response.statusText);
@@ -53,7 +54,10 @@ const SavedLikedInternships = ({ type }) => {
                     ))}
                 </div>
             </main>
-            <Footer />
+            <div className='footer-styling'>
+                <Footer />
+            </div>
+
         </div>
     );
 };

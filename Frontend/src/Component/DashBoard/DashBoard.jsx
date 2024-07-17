@@ -14,7 +14,7 @@ const DashBoard = () => {
     const [savedInternships, setSavedInternships] = useState([]);
     const [likedInternships, setLikedInternships] = useState([]);
     const [displayedInternships, setDisplayedInternships] = useState([]);
-    const [searchTer, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         const fetchInternships = async () => {
@@ -42,8 +42,8 @@ const DashBoard = () => {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    setSavedInternships(data.savedInternships.map(internship => internship.id));
-                    setLikedInternships(data.likedInternships.map(internship => internship.id));
+                    setSavedInternships(Array.isArray(data.savedInternships) ? data.savedInternships.map(internship => internship.id) : []);
+                    setLikedInternships(Array.isArray(data.likedInternships) ? data.likedInternships.map(internship => internship.id) : []);
                 } else {
                     console.error('Error fetching user data:', response.statusText);
                 }
@@ -95,29 +95,65 @@ const DashBoard = () => {
         }
     };
 
-    const saveInternship = async (id) => {
+    const toggleSaveInternship = async (id) => {
         try {
-            await fetch(`http://localhost:3001/api/internships/${id}/save`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `${localStorage.getItem('token')}`
-                }
-            });
-            setSavedInternships([...savedInternships, id]);
+            let response;
+            if (!savedInternships.includes(id)) {
+                response = await fetch(`http://localhost:3001/api/internships/${id}/save`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            }
+            else {
+                response = await fetch(`http://localhost:3001/api/internships/${id}/save`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            }
+            if (response.ok) {
+                const updatedSavedInternships = await response.json();
+                setSavedInternships(Array.isArray(updatedSavedInternships) ? updatedSavedInternships.map(internship => internship.id) : []);
+            } else {
+                console.error('Error saving internship:', response.statusText);
+            }
         } catch (error) {
             console.error('Error saving internship:', error);
         }
     };
 
-    const likeInternship = async (id) => {
+    const toggleLikeInternship = async (id) => {
         try {
-            await fetch(`http://localhost:3001/api/internships/${id}/like`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `${localStorage.getItem('token')}`
-                }
-            });
-            setLikedInternships([...likedInternships, id]);
+            let response;
+            if (!likedInternships.includes(id)) {
+                response = await fetch(`http://localhost:3001/api/internships/${id}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            }
+            else {
+                response = await fetch(`http://localhost:3001/api/internships/${id}/like`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            }
+            if (response.ok) {
+                const updatedLikedInternships = await response.json();
+                setLikedInternships(Array.isArray(updatedLikedInternships) ? updatedLikedInternships.map(internship => internship.id) : []);
+            } else {
+                console.error('Error liking internship:', response.statusText);
+            }
         } catch (error) {
             console.error('Error liking internship:', error);
         }
@@ -154,13 +190,11 @@ const DashBoard = () => {
                                 <p><strong>Qualifications:</strong> {internship.qualifications}</p>
                                 <a href={internship.url} target="_blank" rel="noopener noreferrer">Apply Here</a>
                                 <div className="icons">
-                                    <div onClick={() => saveInternship(internship.id)}>
-                                        {!isSaved && <i className="fa-regular  fa-beat fa-bookmark"></i>}
-                                        {isSaved && <i className="fa-sharp fa-solid fa-bookmark"></i>}
+                                    <div onClick={() => toggleSaveInternship(internship.id)}>
+                                        {isSaved ? <i className="fa-solid fa-bookmark"></i> : <i className="fa-regular fa-bookmark"></i>}
                                     </div>
-                                    <div onClick={() => likeInternship(internship.id)}>
-                                        {!isLiked && <i className="fa-regular fa-beat fa-thumbs-up"></i>}
-                                        {isLiked && <i className="fa-solid fa-thumbs-up"></i>}
+                                    <div onClick={() => toggleLikeInternship(internship.id)}>
+                                        {isLiked ? <i className="fa-solid fa-thumbs-up"></i> : <i className="fa-regular fa-thumbs-up"></i>}
                                     </div>
                                 </div>
                             </div>
