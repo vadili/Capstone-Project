@@ -27,7 +27,7 @@ const Notifications = () => {
         try {
             const token = localStorage.getItem('token');
             await fetch(`http://localhost:3001/api/notifications/${id}`, {
-                method: 'delete',
+                method: 'DELETE',
                 headers: { Authorization: `${token}` }
             });
             setNotifications(prevNotifications => prevNotifications.filter(n => n.id !== id));
@@ -39,19 +39,20 @@ const Notifications = () => {
     return (
         <>
             <Header />
-            <div>
+            <div className="notifications-container">
                 <h2>Notifications</h2>
                 {notifications.length === 0 ? (
                     <p>No new notifications</p>
                 ) : (
-                    <ul>
+                    <div className="notification-cards">
                         {notifications.map(notification => (
-                            <li key={notification.id}>
-                                {notification.content}
+                            <div key={notification.id} className="notification-card">
+                                <h3>{notification.title}</h3>
+                                <p>{notification.content}</p>
                                 <button onClick={() => markAsRead(notification.id)}>Mark as Read</button>
-                            </li>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 )}
             </div>
         </>

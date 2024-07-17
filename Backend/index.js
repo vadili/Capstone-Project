@@ -53,7 +53,6 @@ app.post('/signup', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
     try {
         const user = await prisma.user.create({
             data: {
@@ -128,7 +127,7 @@ app.post('/api/internships', authenticateToken, async (req, res) => {
                 qualifications,
                 url,
                 postedAt: new Date(),
-                recruiterId: recruiter.id
+                recruiterId: parseInt(recruiter.id)
             }
         });
 
@@ -161,18 +160,38 @@ app.get('/api/internships', async (req, res) => {
 
 app.post('/api/internships/:id/save', authenticateToken, async (req, res) => {
     const { id } = req.params;
+    try {
+        const updatedUser = await prisma.user.update({
+            where: { id: req.user.userId },
+            data: {
+                savedInternships:
+                    { connect: { id: parseInt(id) } }
+            },
+            include: {
+                savedInternships: true  // Include savedInternships in the result
+            }
+        });
+        res.json(updatedUser.savedInternships);
+    } catch (error) {
+        console.error('Error in /api/internships/:id/save:', error);
+        res.status(400).json({ error: error.message });
+    }
+});
 
+app.delete('/api/internships/:id/save', authenticateToken, async (req, res) => {
+    const { id } = req.params;
     try {
         const updatedUser = await prisma.user.update({
             where: { id: req.user.userId },
             data: {
                 savedInternships: {
-                    connect: { id: parseInt(id) }
+                    disconnect: { id: parseInt(id) }
                 }
-            }
+            },
+            include: { savedInternships: true }
         });
 
-        res.json(updatedUser);
+        res.json(updatedUser.savedInternships);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -180,27 +199,45 @@ app.post('/api/internships/:id/save', authenticateToken, async (req, res) => {
 
 app.post('/api/internships/:id/like', authenticateToken, async (req, res) => {
     const { id } = req.params;
+    try {
+        const updatedUser = await prisma.user.update({
+            where: { id: req.user.userId },
+            data: {
+                likedInternships:
+                    { connect: { id: parseInt(id) } }
+            },
+            include: {
+                likedInternships: true
+            }
+        });
+        res.json(updatedUser.likedInternships);
+    } catch (error) {
+        console.error('Error in /api/internships/:id/like:', error);
+        res.status(400).json({ error: error.message });
+    }
+});
 
+app.delete('/api/internships/:id/like', authenticateToken, async (req, res) => {
+    const { id } = req.params;
     try {
         const updatedUser = await prisma.user.update({
             where: { id: req.user.userId },
             data: {
                 likedInternships: {
-                    connect: { id: parseInt(id) }
+                    disconnect: { id: parseInt(id) }
                 }
-            }
+            },
+            include: { likedInternships: true }
         });
 
-        res.json(updatedUser);
+        res.json(updatedUser.likedInternships);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 });
 
-
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-
     try {
         const user = await prisma.user.findUnique({ where: { email } });
 
@@ -217,8 +254,18 @@ app.post('/login', async (req, res) => {
 
 app.get('/api/user', authenticateToken, async (req, res) => {
     try {
-        const user = await prisma.user.findUnique({ where: { id: req.user.userId } });
-        res.json(user);
+        const user = await prisma.user.findUnique({
+            where: { id: req.user.userId },
+            include: {
+                savedInternships: true,
+                likedInternships: true,
+            }
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        return res.json(user);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -266,7 +313,6 @@ app.delete('/api/user', authenticateToken, async (req, res) => {
 
 app.post('/api/notifications', authenticateToken, async (req, res) => {
     const { content } = req.body;
-
     try {
         const users = await prisma.user.findMany({
             where: { userType: 'student' }

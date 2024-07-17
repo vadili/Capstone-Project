@@ -24,6 +24,8 @@ model User {
   technicalSkills     Json
   previousInternships Int?
   notifications       Notification[]
+  savedInternships    Internship[]   @relation("usersSavedRelation")
+  likedInternships    Internship[]   @relation("usersLikedRelation")
 }
 
 model Internship {
@@ -37,8 +39,10 @@ model Internship {
   qualifications String
   url            String
   postedAt       DateTime
-  recruiterId    Int?       @unique
+  recruiterId    Int?
   recruiter      Recruiter? @relation(fields: [recruiterId], references: [id], name: "RecruiterInternships")
+  usersSaved     User[]     @relation("usersSavedRelation")
+  usersLiked     User[]     @relation("usersLikedRelation")
 
   @@unique([title, company])
 }
