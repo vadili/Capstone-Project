@@ -14,7 +14,9 @@ const port = process.env.PORT || 3001;
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: '*',
+        origin: 'http://localhost:5173',
+        methods: ["GET", "POST"],
+        credentials: true
     },
 });
 
@@ -35,12 +37,15 @@ io.on('connection', (socket) => {
         io.emit('announcement', announcement);
     });
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', (reason) => {
     });
 });
 
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
 
 app.post('/signup', async (req, res) => {
     const {
@@ -142,7 +147,10 @@ app.post('/api/internships', authenticateToken, async (req, res) => {
             }
         })));
 
-        io.emit('announcement', `New internship created: ${jobTitle} at ${company}`);
+        io.emit('announcement', {
+            content: `New internship created: ${jobTitle} at ${company}`,
+        });
+
         res.status(201).json(newInternship);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -168,7 +176,7 @@ app.post('/api/internships/:id/save', authenticateToken, async (req, res) => {
                     { connect: { id: parseInt(id) } }
             },
             include: {
-                savedInternships: true  // Include savedInternships in the result
+                savedInternships: true
             }
         });
         res.json(updatedUser.savedInternships);
@@ -324,6 +332,7 @@ app.post('/api/notifications', authenticateToken, async (req, res) => {
                     content,
                     userId: user.id
                 }
+                // TODO: look up prisma order by creation data
             });
         });
 

@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { io } from 'socket.io-client';
 import './Header.css';
 
 const Header = ({ showSavedInternships, showLikedInternships }) => {
     const navigate = useNavigate();
     const [showMenu, setShowMenu] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
-    const [notifications, setNotifications] = useState("")
+    const [notifications, setNotifications] = useState([]);
     const [userData, setUserData] = useState(null);
+    const socket = useRef(null);
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -16,7 +18,6 @@ const Header = ({ showSavedInternships, showLikedInternships }) => {
 
     const toggleMenu = () => {
         setShowMenu(prev => !prev);
-
     };
 
     useEffect(() => {
@@ -39,8 +40,6 @@ const Header = ({ showSavedInternships, showLikedInternships }) => {
             }
         };
 
-        fetchNotifications();
-
         const fetchUserData = async () => {
             try {
                 const token = localStorage.getItem('token');
@@ -58,23 +57,38 @@ const Header = ({ showSavedInternships, showLikedInternships }) => {
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
-
             }
         };
 
+        fetchNotifications();
         fetchUserData();
+
+        socket.current = io("http://localhost:3001", {
+            withCredentials: true,
+        });
+
+        socket.current.on("announcement", (notification) => {
+            console.log("New announcement received:", notification);
+            setNotifications(prevNotifications => [notification, ...prevNotifications]);
+            setUnreadCount(prevCount => prevCount + 1);
+        });
+
+        return () => {
+            socket.current.off("announcement");
+            socket.current.disconnect();
+        };
     }, []);
 
     return (
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
+        <nav className="navbar navbar-expand-lg bg-body-tertiary">
+            <div className="container-fluid">
                 <div className="header-left">
                     <div className="logo" onClick={() => navigate('/dashboard')}>TechLink</div>
                 </div>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarScroll">
+                <div className="collapse navbar-collapse" id="navbarScroll">
                     <div className="nav-icons ms-auto">
                         <i className="fa-solid fa-bars icon menu-icon dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
                         <div className="dropdown-menu">
@@ -102,7 +116,6 @@ const Header = ({ showSavedInternships, showLikedInternships }) => {
                 </div>
             </div>
         </nav>
-
     );
 };
 
