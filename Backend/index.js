@@ -47,7 +47,6 @@ app.use(cors({
     credentials: true
 }));
 
-
 app.post('/signup', async (req, res) => {
     const {
         firstName, lastName, email, password, confirmPassword, userType, school, gpa, major, gender,
