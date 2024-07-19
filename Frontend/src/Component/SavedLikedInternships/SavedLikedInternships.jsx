@@ -54,9 +54,9 @@ const SavedLikedInternships = ({ type }) => {
                     ))}
                 </div>
             </main>
-            <div className='footer-styling'>
-                <Footer />
-            </div>
+            {/* <div className='footer-styling'> */}
+            <Footer />
+            {/* </div> */}
 
         </div>
     );

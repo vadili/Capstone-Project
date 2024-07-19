@@ -1,12 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { io } from 'socket.io-client';
 import './Notifications.css';
 import Header from '../Header/Header';
 
 const Notifications = () => {
     const [notifications, setNotifications] = useState([]);
+    const socket = useRef(null);
 
     useEffect(() => {
+
+        const token = localStorage.getItem('token');
+
+        socket.current = io("http://localhost:3001", {
+            withCredentials: true,
+            query: { token: `${token}` }
+
+        });
+
+        socket.current.on("announcement", (notification) => {
+            console.log("New announcement received:", notification);
+            fetchNotifications();
+        });
+
         const fetchNotifications = async () => {
             try {
                 const token = localStorage.getItem('token');
@@ -21,6 +37,11 @@ const Notifications = () => {
         };
 
         fetchNotifications();
+
+        return () => {
+            socket.current.off("announcement");
+            socket.current.disconnect();
+        };
     }, []);
 
     const markAsRead = async (id) => {
@@ -47,7 +68,7 @@ const Notifications = () => {
                     <div className="notification-cards">
                         {notifications.map(notification => (
                             <div key={notification.id} className="notification-card">
-                                <h3>{notification.title}</h3>
+                                <h3>{notification.title || 'Notification'}</h3>
                                 <p>{notification.content}</p>
                                 <button onClick={() => markAsRead(notification.id)}>Mark as Read</button>
                             </div>

@@ -167,12 +167,26 @@ const DashBoard = () => {
         navigate('/liked-internships');
     };
 
+    // const handleSearch = async () => {
+    //     try {
+    //         const response = await fetch(`http://localhost:3001/api/search?keyword=${searchTerm}`);
+    //         if (response.ok) {
+    //             const data = await response.json();
+    //             setDisplayedInternships(data);
+    //         } else {
+    //             console.error('Error searching internships:', response.statusText);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error searching internships:', error);
+    //     }
+    // };
+
     return (
         <div className="dashboard">
             <Header showSavedInternships={showSavedInternships} showLikedInternships={showLikedInternships} />
             <main className="main-content">
                 <div className="search-bar">
-                    <input type="text" placeholder="Search internships..." className="search-bar" />
+                    <input type="text" placeholder="Search internships..." className="search-bar" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                 </div>
                 <div className="internships-container">
                     {internships.slice(0, visibleInternships).map((internship) => {
