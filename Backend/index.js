@@ -47,6 +47,34 @@ app.use(cors({
     credentials: true
 }));
 
+const updateCacheForListing = async (listing) => {
+    const { id, title, description } = listing;
+    const words = new Set([...title.split(/\W+/), ...description.split(/\W+/)]);
+
+    for (const word of words) {
+        if (word) {
+            const lowerCaseWord = word.toLowerCase();
+            const titleScore = (title.toLowerCase().split(lowerCaseWord).length - 1) * 10;
+            const bodyScore = Math.min((description.toLowerCase().split(lowerCaseWord).length - 1), 5);
+            const totalScore = titleScore + bodyScore;
+
+            await prisma.cachedScore.upsert({
+                where: { internshipId_word: { internshipId: id, word: lowerCaseWord } },
+                update: { score: totalScore },
+                create: {
+                    internship: {
+                        connect: {
+                            id,
+                        },
+                    },
+                    word: lowerCaseWord,
+                    score: totalScore
+                },
+            });
+        }
+    }
+};
+
 app.post('/signup', async (req, res) => {
     const {
         firstName, lastName, email, password, confirmPassword, userType, school, gpa, major, gender,
@@ -136,6 +164,8 @@ app.post('/api/internships', authenticateToken, async (req, res) => {
             }
         });
 
+        await updateCacheForListing(newInternship);
+
         const students = await prisma.user.findMany({
             where: { userType: 'student' }
         })
@@ -156,6 +186,42 @@ app.post('/api/internships', authenticateToken, async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 });
+
+app.get('/api/search', async (req, res) => {
+    const { keyword } = req.query;
+    if (!keyword) {
+        return res.status(400).json({ error: 'Keyword is required' });
+    }
+
+    const lowerCaseKeyword = keyword.toLowerCase();
+
+    try {
+        const cachedScores = await prisma.cachedScore.findMany({
+            where: { word: lowerCaseKeyword },
+            orderBy: { score: 'desc' },
+            include: { internship: true },
+            take: 10
+        });
+
+        const internships = cachedScores.map(score => score.internship);
+        res.json(internships);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+const cleanUpCache = async () => {
+    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+    await prisma.cachedScore.deleteMany({
+        where: {
+            updatedAt: {
+                lt: tenMinutesAgo,
+            },
+        },
+    });
+};
+
+setInterval(cleanUpCache, 10 * 60 * 1000);
 
 app.get('/api/internships', async (req, res) => {
     try {

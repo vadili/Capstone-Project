@@ -29,7 +29,7 @@ model User {
 }
 
 model Internship {
-  id             Int        @id @default(autoincrement())
+  id             Int           @id @default(autoincrement())
   title          String
   jobTitle       String
   jobType        String
@@ -40,10 +40,10 @@ model Internship {
   url            String
   postedAt       DateTime
   recruiterId    Int?
-  recruiter      Recruiter? @relation(fields: [recruiterId], references: [id], name: "RecruiterInternships")
-  usersSaved     User[]     @relation("usersSavedRelation")
-  usersLiked     User[]     @relation("usersLikedRelation")
-  // CachedScore    CachedScore?
+  recruiter      Recruiter?    @relation(fields: [recruiterId], references: [id], name: "RecruiterInternships")
+  usersSaved     User[]        @relation("usersSavedRelation")
+  usersLiked     User[]        @relation("usersLikedRelation")
+  CachedScore    CachedScore[]
 
   @@unique([title, company])
 }
@@ -66,10 +66,12 @@ model Notification {
   user      User     @relation(fields: [userId], references: [id])
 }
 
-// model CachedScore {
-//   id           Int        @id @default(autoincrement())
-//   internshipId Int        @unique
-//   word         String
-//   score        Int
-//   internship   Internship @relation(fields: [internshipId], references: [id])
-// }
+model CachedScore {
+  id           Int        @id @default(autoincrement())
+  internshipId Int
+  word         String
+  score        Int
+  internship   Internship @relation(fields: [internshipId], references: [id])
+
+  @@unique([internshipId, word])
+}
