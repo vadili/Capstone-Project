@@ -332,7 +332,6 @@ app.post('/api/notifications', authenticateToken, async (req, res) => {
                     content,
                     userId: user.id
                 }
-                // TODO: look up prisma order by creation data
             });
         });
 
@@ -348,7 +347,12 @@ app.post('/api/notifications', authenticateToken, async (req, res) => {
 app.get('/api/notifications', authenticateToken, async (req, res) => {
     try {
         const notifications = await prisma.notification.findMany({
-            where: { userId: req.user.userId, isRead: false }
+            where: { userId: req.user.userId, isRead: false },
+            orderBy: [
+                {
+                    createdAt: 'desc',
+                },
+            ],
         });
         res.json(notifications);
     } catch (error) {
