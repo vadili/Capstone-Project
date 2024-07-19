@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import './Header.css';
+import { NotificationContext } from '../../App';
 
 const Header = ({ showSavedInternships, showLikedInternships }) => {
     const navigate = useNavigate();
     const [showMenu, setShowMenu] = useState(false);
-    const [unreadCount, setUnreadCount] = useState(0);
-    const [notifications, setNotifications] = useState([]);
+    const [notifications, setNotifications] = useContext(NotificationContext);
     const [userData, setUserData] = useState(null);
     const socket = useRef(null);
 
@@ -31,7 +31,6 @@ const Header = ({ showSavedInternships, showLikedInternships }) => {
                 if (response.ok) {
                     const data = await response.json();
                     setNotifications(data);
-                    setUnreadCount(data.length);
                 } else {
                     console.error('Error fetching notifications:', response.statusText);
                 }
@@ -67,10 +66,8 @@ const Header = ({ showSavedInternships, showLikedInternships }) => {
             withCredentials: true,
         });
 
-        socket.current.on("announcement", (notification) => {
-            console.log("New announcement received:", notification);
-            setNotifications(prevNotifications => [notification, ...prevNotifications]);
-            setUnreadCount(prevCount => prevCount + 1);
+        socket.current.on("announcement", () => {
+            fetchNotifications()
         });
 
         return () => {
@@ -108,7 +105,7 @@ const Header = ({ showSavedInternships, showLikedInternships }) => {
                             </div>
                         </div>
                         <i className="fa-solid fa-bell icon announcement-icon" onClick={() => navigate('/notifications')}>
-                            {unreadCount > 0 && <span className="notification-badge">+ {unreadCount}</span>}
+                            {notifications.length > 0 && <span className="notification-badge">+ {notifications.length}</span>}
                         </i>
                         <i className="fa-solid fa-user icon profile-icon" onClick={() => navigate('/profile')}></i>
                         <button className="logout-button" onClick={handleLogout}>Logout</button>

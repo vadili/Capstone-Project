@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './Component/LoginPage/LoginPage';
 import FirstPage from './Component/FirstPage/FirstPage';
@@ -19,8 +19,15 @@ const PrivateRoute = ({ children }) => {
   return token ? children : <Navigate to="/login" />;
 };
 
+export const NotificationContext = createContext(null);
+
 function App() {
   const [user, setUser] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+
+  const handleSetNotifications = (newNotificationsArray) => {
+    setNotifications(newNotificationsArray)
+  }
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -34,86 +41,88 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <Routes>
-        <Route exact path="/" element={<FirstPage />} />
-        <Route path="/login" element={<LoginPage setUser={setUser} />} />
-        <Route path="/signup-step-1" element={<SignUpPageStep1 />} />
-        <Route path="/signup-step-2" element={<SignUpPageStep2 setUser={setUser} />} />
-        <Route
-          path="/welcome"
-          element={
-            <PrivateRoute>
-              <Welcome firstName={user ? user.firstName : 'Guest'} />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <DashBoard />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <PrivateRoute>
-              <Profile />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/profile/edit"
-          element={
-            <PrivateRoute>
-              <EditProfile />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/create-internship"
-          element={
-            <PrivateRoute>
-              <CreateInternship />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/saved-internships"
-          element={
-            <PrivateRoute>
-              <SavedLikedInternships type="saved" />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/liked-internships"
-          element={
-            <PrivateRoute>
-              <SavedLikedInternships type="liked" />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/notifications"
-          element={
-            <PrivateRoute>
-              <Notifications />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/recruiter/internships"
-          element={
-            <PrivateRoute>
-              <RecruiterInternships />
-            </PrivateRoute>
-          }
-        />
-      </Routes>
-    </Router>
+    <NotificationContext.Provider value={[notifications, handleSetNotifications]}>
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<FirstPage />} />
+          <Route path="/login" element={<LoginPage setUser={setUser} />} />
+          <Route path="/signup-step-1" element={<SignUpPageStep1 />} />
+          <Route path="/signup-step-2" element={<SignUpPageStep2 setUser={setUser} />} />
+          <Route
+            path="/welcome"
+            element={
+              <PrivateRoute>
+                <Welcome firstName={user ? user.firstName : 'Guest'} />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <DashBoard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile/edit"
+            element={
+              <PrivateRoute>
+                <EditProfile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/create-internship"
+            element={
+              <PrivateRoute>
+                <CreateInternship />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/saved-internships"
+            element={
+              <PrivateRoute>
+                <SavedLikedInternships type="saved" />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/liked-internships"
+            element={
+              <PrivateRoute>
+                <SavedLikedInternships type="liked" />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/notifications"
+            element={
+              <PrivateRoute>
+                <Notifications />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/recruiter/internships"
+            element={
+              <PrivateRoute>
+                <RecruiterInternships />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    </NotificationContext.Provider>
   );
 }
 
