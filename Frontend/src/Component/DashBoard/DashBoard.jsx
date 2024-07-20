@@ -198,12 +198,15 @@ const DashBoard = () => {
                             <div key={internship.id} className="internship-box">
                                 <h3>{internship.title}</h3>
                                 <p><strong>Job Title:</strong> {internship.jobTitle}</p>
-                                <p><strong>Job Type:</strong> {internship.jobType}</p>
                                 <p><strong>Company:</strong> {internship.company}</p>
-                                <p><strong>Location:</strong> {internship.location}</p>
                                 <p><strong>Description:</strong> {internship.description}</p>
                                 <p><strong>Qualifications:</strong> {internship.qualifications}</p>
-                                <a href={internship.url} target="_blank" rel="noopener noreferrer">Apply Here</a>
+                                <div className="tooltip-container">
+                                    <button className="button-link" onClick={() => window.open(internship.url, '_blank', 'noopener,noreferrer')}>
+                                        Apply Here
+                                    </button>
+                                    <div className="tooltiptext">This is a {internship.jobType} job in {internship.location}. Click here to proceed with application.</div>
+                                </div>
                                 <div className="icons">
                                     <div onClick={() => toggleSaveInternship(internship.id)}>
                                         {isSaved ? <i className="fa-solid fa-bookmark"></i> : <i className="fa-regular fa-bookmark"></i>}

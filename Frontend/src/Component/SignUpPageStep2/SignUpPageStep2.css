@@ -35,6 +35,16 @@
   width: 100%;
 }
 
+.profile-button{
+  background: pink;
+  color: white;
+}
+
+.profile-button:hover{
+  background-color:#926d73 !important;
+  color: white;
+}
+
 .signup-page-step2 button {
   padding: 10px 20px;
   font-size: 1em;

@@ -1,58 +1,90 @@
-.parent-login-page{
-    height: 100vh;
-    width: 100vw;
+.login-container {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
+    background: #f0f0f0;
 }
 
-.login-page {
-    max-width: 400px;
-    margin: 0;
-    padding: 20px;
-    border: 1px solid #ccc;
+.login-form {
+    background: white;
+    padding: 40px;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
 }
 
-.login-page h2 {
+.login-form h2 {
     margin-bottom: 20px;
 }
 
-.login-page form {
-    display: flex;
-    flex-direction: column;
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
 }
 
-.login-page form div {
-    margin-bottom: 15px;
+.input-group label {
+    position: absolute;
+    top: 12px;
+    left: 0;
+    color: #888;
+    transition: all 0.2s;
+    pointer-events: none;
 }
 
-.login-page label {
-    margin-bottom: 5px;
-    font-weight: bold;
+.input-group input {
+    width: 100%;
+    padding: 10px 0;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    outline: none;
+    transition: border-color 0.2s;
 }
 
-.login-page input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.input-group input:focus {
+    border-bottom: 2px solid pink;
 }
 
-.login-page button {
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: -10px;
+    font-size: 12px;
+    color: #007BFF;
+}
+
+.input-group input:focus + label {
+    color: #007BFF;
+}
+
+.filled {
+    top: -10px !important;
+    font-size: 12px;
+    color: pink !important;
+}
+
+.login-button,
+.signup-button {
+    width: 100%;
     padding: 10px;
-    background-color: #007bff;
-    color: white;
+    margin-top: 10px;
     border: none;
     border-radius: 4px;
+    background: pink;
+    color: white;
     cursor: pointer;
+    transition: background 0.2s;
 }
 
-.login-page button:hover {
-    background-color: #0056b3;
+.login-button:hover,
+.signup-button:hover {
+    background: #926d73;
 }
 
-.error-message {
-    color: red;
-    margin-bottom: 15px;
+.signup-button {
+    background: #6c757d;
+}
+
+.signup-button:hover {
+    background: #5a6268;
 }

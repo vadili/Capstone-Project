@@ -3,6 +3,41 @@
     flex-direction: column;
   }
 
+  .tooltip-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .button-link {
+    background: pink;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-left: 20px;
+    width: 10vw;
+  }
+
+  .tooltiptext {
+    visibility: hidden;
+    width: 400px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: calc(5% - 8px);
+    margin-left: 110%;
+    opacity: 0;
+    transition: opacity 1s;
+  }
+
+  .tooltip-container:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+
   .fixed-header, .fixed-footer {
     width: 100%;
     background: #fff;

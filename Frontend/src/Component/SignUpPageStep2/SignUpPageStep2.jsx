@@ -112,11 +112,11 @@ const SignUpPageStep2 = ({ setUser }) => {
     };
 
     return (
-        <div className='container'>
+        <div className='signup-container'>
             <div>
                 <div class="card my-4 rounded-3 shadow-sm">
                     <div class="card-header py-3">
-                        <h4 class="my-0 fw-normal">Sign Up - Step 2</h4>
+                        <h4 class="my-0 fw-normal text-center">Sign Up</h4>
                     </div>
                     <div class="card-body">
                         <form onSubmit={handleSubmit} class="needs-validation" novalidate="">
@@ -245,18 +245,26 @@ const SignUpPageStep2 = ({ setUser }) => {
                                     </>)}
                                 {formData.userType === 'recruiter' && (
                                     <>
-                                        <div class="col-12">
-                                            <label>Company:</label>
-                                            <input type="text" class="form-control" name="company" value={formData.company} onChange={handleChange} />
+                                        <div className="input-group">
+                                            <label className={formData.company ? 'filled' : ''}>Company:</label>
+                                            <input
+                                                type="text"
+                                                name="company" value={formData.company} onChange={handleChange}
+                                                required
+                                            />
                                         </div>
-                                        <div class="col-12">
-                                            <label>Company Culture:</label>
-                                            <input type="text" class="form-control" name="companyCulture" value={formData.companyCulture} onChange={handleChange} />
+                                        <div className="input-group">
+                                            <label className={formData.companyCulture ? 'filled' : ''}>Company Culture:</label>
+                                            <input
+                                                type="text"
+                                                name="companyCulture" value={formData.companyCulture} onChange={handleChange}
+                                                required
+                                            />
                                         </div>
                                     </>
                                 )}
                             </div>
-                            <button class="btn w-100 btn-primary btn-lg" type="submit">Update Profile</button>
+                            <button class="btn w-100 profile-button btn-lg" type="submit">Update Profile</button>
                         </form>
                     </div>
                 </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import './Header.css';
+import Logo from '../../assets/logo.png'
 import { NotificationContext } from '../../App';
 
 const Header = ({ showSavedInternships, showLikedInternships }) => {
@@ -80,7 +81,7 @@ const Header = ({ showSavedInternships, showLikedInternships }) => {
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
                 <div className="header-left">
-                    <div className="logo" onClick={() => navigate('/dashboard')}>TechLink</div>
+                    <div className="logo" onClick={() => navigate('/dashboard')}><img src={Logo}></img></div>
                 </div>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>

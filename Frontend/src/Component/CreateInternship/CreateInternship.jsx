@@ -16,13 +16,27 @@ const CreateInternship = () => {
         url: ''
     });
 
+    const [urlError, setUrlError] = useState('');
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+
+        if (name === 'url') {
+            const urlPattern = new RegExp('^(https?:\\/\\/)' +
+                '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' +
+                '((\\d{1,3}\\.){3}\\d{1,3}))' +
+                '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
+                '(\\?[;&a-z\\d%_.~+=-]*)?' +
+                '(\\#[-a-z\\d_]*)?$', 'i');
+            setUrlError(urlPattern.test(value) ? '' : 'Invalid URL');
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (urlError) return;
+
         const token = localStorage.getItem('token');
         const authToken = (token.split(' ')[1]);
 
@@ -43,6 +57,7 @@ const CreateInternship = () => {
                 console.error('Error creating internship:', errorData);
             }
         } catch (error) {
+            console.error('Error:', error);
         }
     };
 
@@ -60,7 +75,8 @@ const CreateInternship = () => {
                     <textarea name="description" placeholder="Description" value={formData.description} onChange={handleChange} required></textarea>
                     <textarea name="qualifications" placeholder="Qualifications" value={formData.qualifications} onChange={handleChange} required></textarea>
                     <input type="text" name="url" placeholder="URL" value={formData.url} onChange={handleChange} required />
-                    <button type="submit">Create</button>
+                    {urlError && <p className="error">{urlError}</p>}
+                    <button type="submit" disabled={!!urlError}>Create</button>
                 </form>
             </div>
         </>

@@ -29,6 +29,10 @@
     margin-right: 20px;
 }
 
+.logo img{
+    height: 60px;
+}
+
 .nav-icons {
     display: flex;
     align-items: center;
