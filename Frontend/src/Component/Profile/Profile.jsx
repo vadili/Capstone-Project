@@ -22,7 +22,8 @@ const Profile = () => {
         },
         previousInternships: '',
         company: '',
-        companyCulture: ''
+        companyCulture: '',
+        profilePicture: ''
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -104,6 +105,11 @@ const Profile = () => {
             <div className="profile">
                 <h1>Profile</h1>
                 {error && <p className="error-message">{error}</p>}
+                {formData && formData.profilePicture && <div className="profile-content">
+                    <img src={`http://localhost:3001/${formData.profilePicture}`} alt="Profile Preview" className="profile-preview" />
+                </div>}
+                {!formData || !formData.profilePicture && <i className="fa-solid fa-user icon profile-icon"></i>}
+
                 <div className="profile-fields">
                     <div className="profile-field">
                         <label>First Name:</label>

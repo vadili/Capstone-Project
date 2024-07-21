@@ -55,11 +55,15 @@
     margin-left: 20px;
 }
 
+.logout-button:hover {
+    background-color: #926d73 !important;
+}
+
 .notification-badge {
-    background-color: rgb(218, 129, 129);
+    background: #926d73 !important;
     color: white;
     border-radius: 50%;
-    padding: 2px 3px;
+    padding: 2px 4px;
     font-size: 0.7rem;
     position: absolute;
     top: -10px;

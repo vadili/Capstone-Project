@@ -108,7 +108,10 @@ const Header = ({ showSavedInternships, showLikedInternships }) => {
                         <i className="fa-solid fa-bell icon announcement-icon" onClick={() => navigate('/notifications')}>
                             {notifications.length > 0 && <span className="notification-badge">+ {notifications.length}</span>}
                         </i>
-                        <i className="fa-solid fa-user icon profile-icon" onClick={() => navigate('/profile')}></i>
+                        {userData && userData.profilePicture && <div className="profile-picture" onClick={() => navigate('/profile')}>
+                            <img src={`http://localhost:3001/${userData.profilePicture}`} alt="Profile Preview" className="profile-preview" />
+                        </div>}
+                        {!userData || !userData.profilePicture && <i className="fa-solid fa-user icon profile-icon" onClick={() => navigate('/profile')}></i>}
                         <button className="logout-button" onClick={handleLogout}>Logout</button>
                     </div>
                 </div>

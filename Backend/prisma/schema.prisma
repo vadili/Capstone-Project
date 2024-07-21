@@ -21,6 +21,7 @@ model User {
   raceEthnicity       String?
   school              String?
   userType            String
+  profilePicture      String?
   technicalSkills     Json
   previousInternships Int?
   notifications       Notification[]

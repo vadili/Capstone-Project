@@ -17,11 +17,15 @@
     width: 10vw;
   }
 
+  .button-link:hover {
+    background-color: #926d73 !important;
+  }
+
   .tooltiptext {
     visibility: hidden;
     width: 400px;
     background-color: black;
-    color: #fff;
+    color: black;
     text-align: center;
     border-radius: 6px;
     padding: 5px 0;
@@ -36,6 +40,7 @@
   .tooltip-container:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
+    background-color: #926d73 !important;
   }
 
   .fixed-header, .fixed-footer {
@@ -91,6 +96,22 @@
   .search-bar {
     width: 300px;
     padding: 0.5rem;
-    border: 1px solid rgb(147, 147, 213);
+    border: 1px solid pink;
     border-radius: 4px;
+}
+
+.load-more {
+  background: pink;
+}
+
+.load-more:hover {
+  background-color:#926d73 !important;
+}
+
+.search-button {
+background: pink !important;
+}
+
+.search-button:hover {
+  background-color: #926d73 !important;
 }

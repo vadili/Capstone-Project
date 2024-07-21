@@ -3,10 +3,13 @@ const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
+const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
+const fs = require('fs');
+const path = require('path');
 
 const prisma = new PrismaClient();
 const app = express();
@@ -18,6 +21,12 @@ const io = new Server(server, {
         methods: ["GET", "POST"],
         credentials: true
     },
+});
+
+const storage = multer.memoryStorage();
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 50 * 1024 * 1024 }
 });
 
 const authenticateToken = (req, res, next) => {
@@ -41,7 +50,9 @@ io.on('connection', (socket) => {
     });
 });
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true
@@ -382,6 +393,38 @@ app.delete('/api/user', authenticateToken, async (req, res) => {
         res.json({ message: 'User deleted successfully' });
     } catch (error) {
         res.status(400).json({ error: error.message });
+    }
+});
+
+app.put('/api/user/profile-picture', authenticateToken, upload.single('profilePicture'), async (req, res) => {
+    const userId = req.user.userId;
+
+    if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    const fileBuffer = req.file.buffer;
+    const fileName = `${userId}_${Date.now()}_${req.file.originalname}`;
+    const uploadDir = path.join(__dirname, 'uploads');
+    const filePath = path.join(uploadDir, fileName);
+    const relativeFilePath = `uploads/${fileName}`;
+
+    if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    fs.writeFileSync(filePath, fileBuffer);
+
+    try {
+        const user = await prisma.user.update({
+            where: { id: userId },
+            data: { profilePicture: relativeFilePath },
+        });
+
+        res.json(user);
+    } catch (error) {
+        console.error('Error updating profile picture:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 

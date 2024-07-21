@@ -71,7 +71,7 @@
     border: none;
     border-radius: 4px;
     background: pink;
-    color: white;
+    color: black;
     cursor: pointer;
     transition: background 0.2s;
 }
@@ -83,6 +83,7 @@
 
 .signup-button {
     background: #6c757d;
+    color:black !important;
 }
 
 .signup-button:hover {
