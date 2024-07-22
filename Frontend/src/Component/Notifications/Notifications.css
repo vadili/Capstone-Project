@@ -38,7 +38,7 @@ body {
 }
 
 .notification-card button {
-    background-color: #007bff;
+    background-color: pink;
     color: white;
     border: none;
     padding: 5px 10px;
@@ -47,7 +47,7 @@ body {
 }
 
 .notification-card button:hover {
-    background-color: #0056b3;
+    background-color: #926d73 !important;
 }
 
 @media (max-width: 600px) {

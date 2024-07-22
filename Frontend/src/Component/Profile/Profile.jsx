@@ -22,9 +22,9 @@ const Profile = () => {
         },
         previousInternships: '',
         company: '',
-        companyCulture: ''
+        companyCulture: '',
+        profilePicture: ''
     });
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -40,16 +40,13 @@ const Profile = () => {
                 if (response.ok) {
                     const data = await response.json();
                     setFormData(data);
-                    setLoading(false);
                 } else {
                     console.error('Error fetching profile data:', response.statusText);
                     setError('Error fetching profile data');
-                    setLoading(false);
                 }
             } catch (error) {
                 console.error('Error fetching profile data:', error);
                 setError('Error fetching profile data');
-                setLoading(false);
             }
         };
 
@@ -94,16 +91,17 @@ const Profile = () => {
         return allSkills.join(', ');
     };
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
     return (<>
         <Header />
         <div className='container'>
-            <div className="profile">
+            <div className="profile  text-center">
                 <h1>Profile</h1>
                 {error && <p className="error-message">{error}</p>}
+                {formData && formData.profilePicture && <div className="profile-content">
+                    <img src={`http://localhost:3001/${formData.profilePicture}`} alt="Profile Preview" className="profile-preview" />
+                </div>}
+                {!formData || !formData.profilePicture && <i className="fa-solid fa-2xl mb-4 fa-user icon profile-icon"></i>}
+
                 <div className="profile-fields">
                     <div className="profile-field">
                         <label>First Name:</label>

@@ -1,4 +1,5 @@
 import React from 'react';
+import Logo from '../../assets/logo.png'
 import './Footer.css';
 
 const Footer = () => {
@@ -8,7 +9,7 @@ const Footer = () => {
             <div className="footer-container">
                 <div className="footer-top">
                     <div className="footer-left">
-                        <h2>TechLink</h2>
+                        <div className="logo" onClick={() => navigate('/dashboard')}><img src={Logo}></img></div>
                     </div>
                     <div className="footer-right">
                         <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">

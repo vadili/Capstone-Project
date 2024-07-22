@@ -42,24 +42,31 @@ const LoginPage = ({ setUser }) => {
     };
 
     return (
-        <div className='parent-login-page'>
-            <div className="login-page">
+        <div className="login-container">
+            <form className="login-form" onSubmit={handleSubmit}>
                 <h2>Log in</h2>
                 {error && <p className="error-message">{error}</p>}
-                <form onSubmit={handleSubmit}>
-                    <div>
-                        <label>Email:</label>
-                        <input type="email" name="email" value={formData.email} onChange={handleChange} required />
-                    </div>
-                    <div>
-                        <label>Password:</label>
-                        <input type="password" name="password" value={formData.password} onChange={handleChange} required />
-                    </div>
-                    <button type="submit">Log in</button>
-                </form>
+                <div className="input-group">
+                    <label className={formData.email ? 'filled' : ''}>Email:</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email} onChange={handleChange} required
+                    />
+                </div>
+                <div className="input-group">
+                    <label className={formData.password ? 'filled' : ''}>Password:</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password" value={formData.password} onChange={handleChange} required
+                    />
+                </div>
+                <button type="submit" className="login-button">Log in</button>
                 <p>Don't have an account?</p>
-                <button onClick={() => navigate('/signup-step-1')}>Sign Up</button>
-            </div>
+                <button type="button" onClick={() => navigate('/signup-step-1')} className="signup-button">Sign Up</button>
+            </form>
         </div>
     );
 };

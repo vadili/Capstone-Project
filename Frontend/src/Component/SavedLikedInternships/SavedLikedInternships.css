@@ -1,9 +1,45 @@
-/* .saved-liked-internships {
-    padding: 20px;
-} */
-
 .main-content {
     padding: 20px;
+}
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.button-link {
+    background: pink;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-left: 20px;
+    width: 10vw;
+}
+
+.button-link:hover {
+    background-color: #926d73 !important;
+}
+
+.tooltiptext {
+    visibility: hidden;
+    width: 400px;
+    background-color: black;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: calc(5% - 8px);
+    margin-left: 110%;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.tooltip-container:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+    background-color: #926d73 !important;
 }
 
 .internship-box p {

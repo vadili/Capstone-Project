@@ -167,29 +167,43 @@ const DashBoard = () => {
         navigate('/liked-internships');
     };
 
-    // const handleSearch = async () => {
-    //     try {
-    //         const response = await fetch(`http://localhost:3001/api/search?keyword=${searchTerm}`);
-    //         if (response.ok) {
-    //             const data = await response.json();
-    //             setDisplayedInternships(data);
-    //         } else {
-    //             console.error('Error searching internships:', response.statusText);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error searching internships:', error);
-    //     }
-    // };
+    useEffect(() => {
+        const handleSearch = async () => {
+            if (searchTerm.trim() === '') {
+                setDisplayedInternships(internships);
+                return;
+            }
+            try {
+                const response = await fetch(`http://localhost:3001/api/search?keyword=${searchTerm}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setDisplayedInternships(data);
+                } else {
+                    console.error('Error searching internships:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error searching internships:', error);
+            }
+        };
+
+        handleSearch();
+    }, [searchTerm, internships]);
 
     return (
         <div className="dashboard">
             <Header showSavedInternships={showSavedInternships} showLikedInternships={showLikedInternships} />
             <main className="main-content">
                 <div className="search-bar">
-                    <input type="text" placeholder="Search internships..." className="search-bar" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                    <input
+                        type="text"
+                        placeholder="Search internships..."
+                        className="search-bar"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                 </div>
                 <div className="internships-container">
-                    {internships.slice(0, visibleInternships).map((internship) => {
+                    {displayedInternships.slice(0, visibleInternships).map((internship) => {
                         const isSaved = savedInternships.includes(internship.id);
                         const isLiked = likedInternships.includes(internship.id);
 
@@ -197,12 +211,15 @@ const DashBoard = () => {
                             <div key={internship.id} className="internship-box">
                                 <h3>{internship.title}</h3>
                                 <p><strong>Job Title:</strong> {internship.jobTitle}</p>
-                                <p><strong>Job Type:</strong> {internship.jobType}</p>
                                 <p><strong>Company:</strong> {internship.company}</p>
-                                <p><strong>Location:</strong> {internship.location}</p>
                                 <p><strong>Description:</strong> {internship.description}</p>
                                 <p><strong>Qualifications:</strong> {internship.qualifications}</p>
-                                <a href={internship.url} target="_blank" rel="noopener noreferrer">Apply Here</a>
+                                <div className="tooltip-container">
+                                    <button className="button-link" onClick={() => window.open(internship.url, '_blank', 'noopener,noreferrer')}>
+                                        Apply Here
+                                    </button>
+                                    <div className="tooltiptext">This is a {internship.jobType} job in {internship.location}. Click here to proceed with application.</div>
+                                </div>
                                 <div className="icons">
                                     <div onClick={() => toggleSaveInternship(internship.id)}>
                                         {isSaved ? <i className="fa-solid fa-bookmark"></i> : <i className="fa-regular fa-bookmark"></i>}
@@ -215,7 +232,7 @@ const DashBoard = () => {
                         );
                     })}
                 </div>
-                {visibleInternships < internships.length && (
+                {visibleInternships < displayedInternships.length && (
                     <button onClick={loadMore} className="load-more">
                         Load More
                     </button>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import './Header.css';
+import Logo from '../../assets/logo.png'
 import { NotificationContext } from '../../App';
 
 const Header = ({ showSavedInternships, showLikedInternships }) => {
@@ -80,7 +81,7 @@ const Header = ({ showSavedInternships, showLikedInternships }) => {
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
                 <div className="header-left">
-                    <div className="logo" onClick={() => navigate('/dashboard')}>TechLink</div>
+                    <div className="logo" onClick={() => navigate('/dashboard')}><img src={Logo}></img></div>
                 </div>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
@@ -92,8 +93,9 @@ const Header = ({ showSavedInternships, showLikedInternships }) => {
                             <div className='dropdown-container'>
                                 {userData && userData.userType === 'student' && (
                                     <>
-                                        <div className='dropdown-item' onClick={showSavedInternships}>Saved Internships</div>
-                                        <div className='dropdown-item' onClick={showLikedInternships}>Liked Internships</div>
+                                        <div className='dropdown-item' onClick={() => navigate('/saved-internships')}>Saved Internships</div>
+                                        <div className='dropdown-item' onClick={() => navigate('/liked-internships')}>Liked Internships</div>
+
                                     </>
                                 )}
                                 {userData && userData.userType === 'recruiter' && (
@@ -107,7 +109,10 @@ const Header = ({ showSavedInternships, showLikedInternships }) => {
                         <i className="fa-solid fa-bell icon announcement-icon" onClick={() => navigate('/notifications')}>
                             {notifications.length > 0 && <span className="notification-badge">+ {notifications.length}</span>}
                         </i>
-                        <i className="fa-solid fa-user icon profile-icon" onClick={() => navigate('/profile')}></i>
+                        {userData && userData.profilePicture && <div className="profile-picture" onClick={() => navigate('/profile')}>
+                            <img src={`http://localhost:3001/${userData.profilePicture}`} alt="Profile Preview" className="profile-preview" />
+                        </div>}
+                        {!userData || !userData.profilePicture && <i className="fa-solid fa-user icon profile-icon" onClick={() => navigate('/profile')}></i>}
                         <button className="logout-button" onClick={handleLogout}>Logout</button>
                     </div>
                 </div>

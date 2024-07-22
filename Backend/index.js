@@ -3,10 +3,13 @@ const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
+const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
+const fs = require('fs');
+const path = require('path');
 
 const prisma = new PrismaClient();
 const app = express();
@@ -18,6 +21,12 @@ const io = new Server(server, {
         methods: ["GET", "POST"],
         credentials: true
     },
+});
+
+const storage = multer.memoryStorage();
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 50 * 1024 * 1024 }
 });
 
 const authenticateToken = (req, res, next) => {
@@ -41,11 +50,55 @@ io.on('connection', (socket) => {
     });
 });
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true
 }));
+
+const updateCacheForListing = async (listing) => {
+    const { id, title, description } = listing;
+    const words = new Set([...title.split(/\W+/), ...description.split(/\W+/)]);
+
+    for (const word of words) {
+        if (word) {
+            const lowerCaseWord = word.toLowerCase();
+            const titleScore = (title.toLowerCase().split(lowerCaseWord).length - 1) * 10;
+            const bodyScore = Math.min((description.toLowerCase().split(lowerCaseWord).length - 1), 5);
+            const totalScore = titleScore + bodyScore;
+
+            await prisma.cachedScore.upsert({
+                where: { internshipId_word: { internshipId: id, word: lowerCaseWord } },
+                update: { score: totalScore },
+                create: {
+                    internship: {
+                        connect: {
+                            id,
+                        },
+                    },
+                    word: lowerCaseWord,
+                    score: totalScore
+                },
+            });
+        }
+    }
+};
+
+const cacheExistingInternships = async () => {
+    try {
+        const internships = await prisma.internship.findMany();
+
+        for (const internship of internships) {
+            await updateCacheForListing(internship);
+        }
+
+        console.log('Existing internships cached successfully.');
+    } catch (error) {
+        console.error('Error caching existing internships:', error);
+    }
+};
 
 app.post('/signup', async (req, res) => {
     const {
@@ -121,6 +174,19 @@ app.post('/api/internships', authenticateToken, async (req, res) => {
             return res.status(404).json({ error: 'Recruiter not found' });
         }
 
+        const existingInternship = await prisma.internship.findUnique({
+            where: {
+                title_company: {
+                    title,
+                    company
+                }
+            }
+        });
+
+        if (existingInternship) {
+            return res.status(400).json({ error: 'An internship with this title and company already exists' });
+        }
+
         const newInternship = await prisma.internship.create({
             data: {
                 title,
@@ -135,6 +201,8 @@ app.post('/api/internships', authenticateToken, async (req, res) => {
                 recruiterId: parseInt(recruiter.id)
             }
         });
+
+        await updateCacheForListing(newInternship);
 
         const students = await prisma.user.findMany({
             where: { userType: 'student' }
@@ -156,6 +224,42 @@ app.post('/api/internships', authenticateToken, async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 });
+
+app.get('/api/search', async (req, res) => {
+    const { keyword } = req.query;
+    if (!keyword) {
+        return res.status(400).json({ error: 'Keyword is required' });
+    }
+
+    const lowerCaseKeyword = keyword.toLowerCase();
+
+    try {
+        const cachedScores = await prisma.cachedScore.findMany({
+            where: { word: lowerCaseKeyword },
+            orderBy: { score: 'desc' },
+            include: { internship: true },
+            take: 10
+        });
+
+        const internships = cachedScores.map(score => score.internship);
+        res.json(internships);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+const cleanUpCache = async () => {
+    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+    await prisma.cachedScore.deleteMany({
+        where: {
+            updatedAt: {
+                lt: tenMinutesAgo,
+            },
+        },
+    });
+};
+
+setInterval(cleanUpCache, 10 * 60 * 1000);
 
 app.get('/api/internships', async (req, res) => {
     try {
@@ -319,6 +423,38 @@ app.delete('/api/user', authenticateToken, async (req, res) => {
     }
 });
 
+app.put('/api/user/profile-picture', authenticateToken, upload.single('profilePicture'), async (req, res) => {
+    const userId = req.user.userId;
+
+    if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    const fileBuffer = req.file.buffer;
+    const fileName = `${userId}_${Date.now()}_${req.file.originalname}`;
+    const uploadDir = path.join(__dirname, 'uploads');
+    const filePath = path.join(uploadDir, fileName);
+    const relativeFilePath = `uploads/${fileName}`;
+
+    if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    fs.writeFileSync(filePath, fileBuffer);
+
+    try {
+        const user = await prisma.user.update({
+            where: { id: userId },
+            data: { profilePicture: relativeFilePath },
+        });
+
+        res.json(user);
+    } catch (error) {
+        console.error('Error updating profile picture:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 app.post('/api/notifications', authenticateToken, async (req, res) => {
     const { content } = req.body;
     try {
@@ -407,6 +543,7 @@ app.get('/api/recruiter/internships/:email', async (req, res) => {
     }
 });
 
-server.listen(port, () => {
+server.listen(port, async () => {
     console.log(`Server is running on port ${port}`);
+    await cacheExistingInternships();
 });
