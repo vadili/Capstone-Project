@@ -86,6 +86,20 @@ const updateCacheForListing = async (listing) => {
     }
 };
 
+const cacheExistingInternships = async () => {
+    try {
+        const internships = await prisma.internship.findMany();
+
+        for (const internship of internships) {
+            await updateCacheForListing(internship);
+        }
+
+        console.log('Existing internships cached successfully.');
+    } catch (error) {
+        console.error('Error caching existing internships:', error);
+    }
+};
+
 app.post('/signup', async (req, res) => {
     const {
         firstName, lastName, email, password, confirmPassword, userType, school, gpa, major, gender,
@@ -158,6 +172,19 @@ app.post('/api/internships', authenticateToken, async (req, res) => {
 
         if (!recruiter) {
             return res.status(404).json({ error: 'Recruiter not found' });
+        }
+
+        const existingInternship = await prisma.internship.findUnique({
+            where: {
+                title_company: {
+                    title,
+                    company
+                }
+            }
+        });
+
+        if (existingInternship) {
+            return res.status(400).json({ error: 'An internship with this title and company already exists' });
         }
 
         const newInternship = await prisma.internship.create({
@@ -516,6 +543,7 @@ app.get('/api/recruiter/internships/:email', async (req, res) => {
     }
 });
 
-server.listen(port, () => {
+server.listen(port, async () => {
     console.log(`Server is running on port ${port}`);
+    await cacheExistingInternships();
 });
