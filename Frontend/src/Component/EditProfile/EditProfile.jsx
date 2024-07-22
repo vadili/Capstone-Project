@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../Header/Header';
+import './EditProfile.css'
 import EditProfilePicture from '../EditProfilePicture/EditProfilePicture';
 
 const EditProfile = () => {
@@ -22,7 +23,7 @@ const EditProfile = () => {
         profilePicture: ''
     });
     const [file, setFile] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -107,54 +108,56 @@ const EditProfile = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            if (file) {
-                const formData = new FormData();
-                formData.append('profilePicture', file);
+        setLoading(true);
+        setTimeout(async () => {
+            try {
+                if (file) {
+                    const formData = new FormData();
+                    formData.append('profilePicture', file);
 
-                try {
-                    const token = localStorage.getItem('token');
-                    const response = await fetch('http://localhost:3001/api/user/profile-picture', {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': token,
-                        },
-                        body: formData,
-                    });
+                    try {
+                        const token = localStorage.getItem('token');
+                        const response = await fetch('http://localhost:3001/api/user/profile-picture', {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': token,
+                            },
+                            body: formData,
+                        });
 
-                } catch (error) {
-                    console.error('Error updating profile picture', error);
+                    } catch (error) {
+                        console.error('Error updating profile picture', error);
+                    }
                 }
+                const token = localStorage.getItem('token');
+                const response = await fetch('http://localhost:3001/api/user', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                if (response.ok) {
+                    navigate('/profile');
+                } else {
+                    const errorData = await response.json();
+                    setError(errorData.error || 'Update failed');
+                    console.error('Error updating profile:', errorData);
+                }
+            } catch (error) {
+                setError('An error occurred. Please try again.');
+                console.error('Error updating profile:', error);
+            } finally {
+                setLoading(false);
             }
-            const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3001/api/user', {
-                method: 'PUT',
-                headers: {
-                    'Authorization': token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            if (response.ok) {
-                navigate('/profile');
-            } else {
-                const errorData = await response.json();
-                setError(errorData.error || 'Update failed');
-                console.error('Error updating profile:', errorData);
-            }
-        } catch (error) {
-            setError('An error occurred. Please try again.');
-            console.error('Error updating profile:', error);
-        }
+        }, 5000);
     };
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
 
     return (
         <>
             <Header />
+            {loading && <div className='glimmer-overlay'></div>}
             <div className='container'>
                 <div>
                     <div className="card my-4 rounded-3 shadow-sm">

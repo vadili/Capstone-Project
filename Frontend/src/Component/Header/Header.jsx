@@ -93,8 +93,9 @@ const Header = ({ showSavedInternships, showLikedInternships }) => {
                             <div className='dropdown-container'>
                                 {userData && userData.userType === 'student' && (
                                     <>
-                                        <div className='dropdown-item' onClick={showSavedInternships}>Saved Internships</div>
-                                        <div className='dropdown-item' onClick={showLikedInternships}>Liked Internships</div>
+                                        <div className='dropdown-item' onClick={() => navigate('/saved-internships')}>Saved Internships</div>
+                                        <div className='dropdown-item' onClick={() => navigate('/liked-internships')}>Liked Internships</div>
+
                                     </>
                                 )}
                                 {userData && userData.userType === 'recruiter' && (

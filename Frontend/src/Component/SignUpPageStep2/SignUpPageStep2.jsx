@@ -263,7 +263,7 @@ const SignUpPageStep2 = ({ setUser }) => {
                                 </>
                             )}
                         </div>
-                        <button class="btn w-100 text-dark profile-button btn-lg" type="submit">Update Profile</button>
+                        <button class="btn w-100 text-dark profile-button btn-lg" type="submit">Sign Up</button>
                     </form>
                 </div>
             </div>

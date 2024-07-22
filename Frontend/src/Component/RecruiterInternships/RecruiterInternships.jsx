@@ -11,7 +11,6 @@ const RecruiterInternships = () => {
     useEffect(() => {
         const fetchInternships = async () => {
 
-
             try {
                 const user = JSON.parse(localStorage.getItem('user'))
                 const response = await fetch(`http://localhost:3001/api/recruiter/internships/${user.email}`);
