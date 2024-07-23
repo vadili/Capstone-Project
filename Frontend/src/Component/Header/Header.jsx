@@ -5,9 +5,8 @@ import './Header.css';
 import Logo from '../../assets/logo.png'
 import { NotificationContext } from '../../App';
 
-const Header = ({ showSavedInternships, showLikedInternships }) => {
+const Header = ({ }) => {
     const navigate = useNavigate();
-    const [showMenu, setShowMenu] = useState(false);
     const [notifications, setNotifications] = useContext(NotificationContext);
     const [userData, setUserData] = useState(null);
     const socket = useRef(null);
@@ -15,10 +14,6 @@ const Header = ({ showSavedInternships, showLikedInternships }) => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         navigate('/login');
-    };
-
-    const toggleMenu = () => {
-        setShowMenu(prev => !prev);
     };
 
     useEffect(() => {
@@ -68,7 +63,7 @@ const Header = ({ showSavedInternships, showLikedInternships }) => {
         });
 
         socket.current.on("announcement", () => {
-            fetchNotifications()
+            fetchNotifications();
         });
 
         return () => {
@@ -103,6 +98,11 @@ const Header = ({ showSavedInternships, showLikedInternships }) => {
                                         <div className='dropdown-item' onClick={() => navigate('/create-internship')}>Create New Internship</div>
                                         <div className='dropdown-item' onClick={() => navigate('/recruiter/internships')}>Created Internship</div>
                                     </>
+                                )}
+                                {userData && (
+                                    <div className='dropdown-item' onClick={() => navigate('/announcement')}>
+                                        Timeline
+                                    </div>
                                 )}
                             </div>
                         </div>

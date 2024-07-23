@@ -12,6 +12,7 @@ import CreateInternship from './Component/CreateInternship/CreateInternship';
 import SavedLikedInternships from './Component/SavedLikedInternships/SavedLikedInternships';
 import Notifications from './Component/Notifications/Notifications';
 import RecruiterInternships from './Component/RecruiterInternships/RecruiterInternships';
+import AnnouncementPage from './Component/AnnouncementPage/AnnouncementPage';
 import './App.css';
 
 const PrivateRoute = ({ children }) => {
@@ -117,6 +118,14 @@ function App() {
             element={
               <PrivateRoute>
                 <RecruiterInternships />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/announcement"
+            element={
+              <PrivateRoute>
+                <AnnouncementPage />
               </PrivateRoute>
             }
           />

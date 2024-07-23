@@ -37,13 +37,6 @@ const SignUpPageStep2 = ({ setUser }) => {
         }
     }, [location.state, navigate]);
 
-    const toggleDropdown = (name) => {
-        setDropdownOpen((prevState) => ({
-            ...prevState,
-            [name]: !prevState[name],
-        }));
-    };
-
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         if (name.startsWith('technicalSkills.')) {

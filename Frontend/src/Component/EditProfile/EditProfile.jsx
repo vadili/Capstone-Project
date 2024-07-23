@@ -95,17 +95,6 @@ const EditProfile = () => {
         });
     };
 
-    const handleImageSave = (file) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setFormData({
-                ...formData,
-                profilePicture: reader.result
-            });
-        };
-        reader.readAsDataURL(file);
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);

@@ -93,8 +93,6 @@ const cacheExistingInternships = async () => {
         for (const internship of internships) {
             await updateCacheForListing(internship);
         }
-
-        console.log('Existing internships cached successfully.');
     } catch (error) {
         console.error('Error caching existing internships:', error);
     }
@@ -146,6 +144,38 @@ app.post('/signup', async (req, res) => {
         res.status(201).json({ token, user });
     } catch (error) {
         console.error("Error during user creation:", error);
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.post('/api/announcements', authenticateToken, async (req, res) => {
+    const { content } = req.body;
+
+    try {
+        const announcement = await prisma.announcement.create({
+            data: {
+                content,
+                userId: req.user.userId
+            }
+        });
+
+        io.emit('announcement', announcement);
+
+        const users = await prisma.user.findMany();
+        const notifications = users.map(user => {
+            return prisma.notification.create({
+                data: {
+                    content: `New announcement: ${content}`,
+                    userId: user.id
+                }
+            });
+        });
+
+        await Promise.all(notifications);
+
+        res.status(201).json(announcement);
+    } catch (error) {
+        console.error('Error creating announcement:', error);
         res.status(400).json({ error: error.message });
     }
 });
