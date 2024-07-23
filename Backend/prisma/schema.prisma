@@ -27,6 +27,7 @@ model User {
   notifications       Notification[]
   savedInternships    Internship[]   @relation("usersSavedRelation")
   likedInternships    Internship[]   @relation("usersLikedRelation")
+  Announcement        Announcement[]
 }
 
 model Internship {
@@ -72,7 +73,16 @@ model CachedScore {
   internshipId Int
   word         String
   score        Int
+  updatedAt    DateTime   @default(now()) @updatedAt
   internship   Internship @relation(fields: [internshipId], references: [id])
 
   @@unique([internshipId, word])
+}
+
+model Announcement {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
 }

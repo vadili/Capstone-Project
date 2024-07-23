@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import './SavedLikedInternships.css';
 
 const SavedLikedInternships = ({ type }) => {
-    const navigate = useNavigate();
     const [internships, setInternships] = useState([]);
 
     useEffect(() => {

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './RecruiterInternships.css';
 import Header from '../Header/Header';
 
 const RecruiterInternships = () => {
     const [internships, setInternships] = useState([]);
     const [displayedInternships, setDisplayedInternships] = useState([]);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchInternships = async () => {
