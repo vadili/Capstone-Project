@@ -72,6 +72,11 @@ const Header = ({ }) => {
         };
     }, []);
 
+    const handleEditInternship = (id) => {
+        localStorage.setItem('editInternshipId', id);
+        navigate('/edit-internship');
+    };
+
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
@@ -97,6 +102,11 @@ const Header = ({ }) => {
                                     <>
                                         <div className='dropdown-item' onClick={() => navigate('/create-internship')}>Create New Internship</div>
                                         <div className='dropdown-item' onClick={() => navigate('/recruiter/internships')}>Created Internship</div>
+                                        {userData.createdInternships && userData.createdInternships.map(internship => (
+                                            <div key={internship.id} className='dropdown-item' onClick={() => handleEditInternship(internship.id)}>
+                                                Edit {internship.title}
+                                            </div>
+                                        ))}
                                     </>
                                 )}
                                 {userData && (
