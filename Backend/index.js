@@ -300,6 +300,102 @@ app.get('/api/internships', async (req, res) => {
     }
 });
 
+app.put('/api/internships', authenticateToken, async (req, res) => {
+    const { id, title, jobTitle, jobType, company, location, description, qualifications, url } = req.body;
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: req.user.userId }
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        if (user.userType !== 'recruiter') {
+            return res.status(403).json({ error: 'User is not authorized to edit internships' });
+        }
+
+        const recruiter = await prisma.recruiter.findUnique({
+            where: { email: user.email }
+        });
+
+        if (!recruiter) {
+            return res.status(404).json({ error: 'Recruiter not found' });
+        }
+
+        const internship = await prisma.internship.findUnique({
+            where: { id: parseInt(id) }
+        });
+
+        if (!internship) {
+            return res.status(404).json({ error: 'Internship not found' });
+        }
+
+        if (internship.recruiterId !== recruiter.id) {
+            return res.status(403).json({ error: 'User is not authorized to edit this internship' });
+        }
+
+        const updatedInternship = await prisma.internship.update({
+            where: { id: parseInt(id) },
+            data: {
+                title,
+                jobTitle,
+                jobType,
+                company,
+                location,
+                description,
+                qualifications,
+                url
+            }
+        });
+
+        res.json(updatedInternship);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.get('/api/internships/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const internship = await prisma.internship.findUnique({
+            where: { id: parseInt(id) },
+        });
+
+        if (!internship) {
+            return res.status(404).json({ error: 'Internship not found' });
+        }
+
+        res.json(internship);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.put('/api/internships/:id', async (req, res) => {
+    const { id } = req.params;
+    const { title, jobTitle, jobType, company, location, description, qualifications, url } = req.body;
+    try {
+        const internship = await prisma.internship.update({
+            where: { id: parseInt(id) },
+            data: {
+                title,
+                jobTitle,
+                jobType,
+                company,
+                location,
+                description,
+                qualifications,
+                url,
+            },
+        });
+
+        res.json(internship);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
 app.post('/api/internships/:id/save', authenticateToken, async (req, res) => {
     const { id } = req.params;
     try {

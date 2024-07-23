@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './RecruiterInternships.css';
 import Header from '../Header/Header';
 
 const RecruiterInternships = () => {
     const [internships, setInternships] = useState([]);
     const [displayedInternships, setDisplayedInternships] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchInternships = async () => {
@@ -27,6 +29,11 @@ const RecruiterInternships = () => {
         fetchInternships();
     }, []);
 
+    const handleEdit = (id) => {
+        localStorage.setItem('editInternshipId', id);
+        navigate('/edit-internship');
+    };
+
     return (
         <>
             <Header />
@@ -45,9 +52,8 @@ const RecruiterInternships = () => {
                                 <p><strong>Description:</strong> {internship.description}</p>
                                 <p><strong>Qualifications:</strong> {internship.qualifications}</p>
                                 <p><strong>Posted Date:</strong> {new Date(internship.postedAt).toLocaleDateString()}</p>
-                                <a href={internship.url} target="_blank" rel="noopener noreferrer">
-                                    Apply
-                                </a>
+                                <a href={internship.url} target="_blank" rel="noopener noreferrer">Apply</a>
+                                <button className="edit-button" onClick={() => handleEdit(internship.id)}>Edit</button>
                             </li>
                         ))}
                     </ul>
