@@ -82,6 +82,19 @@ const updateCacheForListing = async (listing) => {
                     score: totalScore
                 },
             });
+
+            const cachedScores = await prisma.cachedScore.findMany({
+                where: { word: lowerCaseWord },
+                orderBy: { score: 'desc' }
+            });
+
+            if (cachedScores.length > 10) {
+                const scoresToDelete = cachedScores.slice(10);
+                const deletePromises = scoresToDelete.map(score => prisma.cachedScore.delete({
+                    where: { id: score.id }
+                }));
+                await Promise.all(deletePromises);
+            }
         }
     }
 };
@@ -148,34 +161,50 @@ app.post('/signup', async (req, res) => {
     }
 });
 
-app.post('/api/announcements', authenticateToken, async (req, res) => {
+app.post('/api/announcements', authenticateToken, upload.single('photo'), async (req, res) => {
     const { content } = req.body;
+    let photoPath = null;
+
+    if (req.file) {
+        const fileBuffer = req.file.buffer;
+        const fileName = `${req.user.userId}_${Date.now()}_${req.file.originalname}`;
+        const uploadDir = path.join(__dirname, 'uploads');
+        const filePath = path.join(uploadDir, fileName);
+        photoPath = `uploads/${fileName}`;
+
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+
+        fs.writeFileSync(filePath, fileBuffer);
+    }
 
     try {
         const announcement = await prisma.announcement.create({
             data: {
                 content,
+                photo: photoPath,
                 userId: req.user.userId
             }
         });
 
         io.emit('announcement', announcement);
 
-        const users = await prisma.user.findMany();
-        const notifications = users.map(user => {
-            return prisma.notification.create({
-                data: {
-                    content: `New announcement: ${content}`,
-                    userId: user.id
-                }
-            });
-        });
-
-        await Promise.all(notifications);
-
         res.status(201).json(announcement);
     } catch (error) {
         console.error('Error creating announcement:', error);
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.get('/api/announcements', authenticateToken, async (req, res) => {
+    try {
+        const announcements = await prisma.announcement.findMany({
+            orderBy: { createdAt: 'desc' }
+        });
+        res.status(200).json(announcements);
+    } catch (error) {
+        console.error('Error fetching announcements:', error);
         res.status(400).json({ error: error.message });
     }
 });
@@ -672,4 +701,5 @@ app.get('/api/recruiter/internships/:email', async (req, res) => {
 server.listen(port, async () => {
     console.log(`Server is running on port ${port}`);
     await cacheExistingInternships();
+    setInterval(cleanUpCache, 10 * 60 * 1000);
 });

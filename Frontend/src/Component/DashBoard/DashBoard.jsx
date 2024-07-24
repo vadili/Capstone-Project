@@ -3,7 +3,6 @@ import './DashBoard.css';
 import { useNavigate } from 'react-router-dom';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-import SavedLikedInternships from '../SavedLikedInternships/SavedLikedInternships';
 
 const DashBoard = () => {
     const navigate = useNavigate();
@@ -16,22 +15,22 @@ const DashBoard = () => {
     const [displayedInternships, setDisplayedInternships] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
-    useEffect(() => {
-        const fetchInternships = async () => {
-            try {
-                const response = await fetch('http://localhost:3001/api/internships');
-                if (response.ok) {
-                    const data = await response.json();
-                    setInternships(data);
-                    setDisplayedInternships(data);
-                } else {
-                    console.error('Error fetching internships:', response.statusText);
-                }
-            } catch (error) {
-                console.error('Error fetching internships:', error);
+    const fetchInternships = async () => {
+        try {
+            const response = await fetch('http://localhost:3001/api/internships');
+            if (response.ok) {
+                const data = await response.json();
+                setInternships(data);
+                setDisplayedInternships(data);
+            } else {
+                console.error('Error fetching internships:', response.statusText);
             }
-        };
+        } catch (error) {
+            console.error('Error fetching internships:', error);
+        }
+    };
 
+    useEffect(() => {
         const fetchUserData = async () => {
             try {
                 const response = await fetch('http://localhost:3001/api/user', {

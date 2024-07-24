@@ -85,4 +85,5 @@ model Announcement {
   createdAt DateTime @default(now())
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
+  photo     String?
 }

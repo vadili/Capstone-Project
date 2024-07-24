@@ -13,6 +13,8 @@ ul {
 }
 
 li {
+    display: flex;
+    flex-direction: column;
     background: #f9f9f9;
     border: 1px solid #ddd;
     padding: 20px;
@@ -46,4 +48,10 @@ a {
 
 a:hover {
     color: pink;
+}
+
+.edit-button {
+
+    width: fit-content;
+    align-self: end;
 }
