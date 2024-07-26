@@ -36,9 +36,9 @@ const SavedLikedInternships = ({ type }) => {
     const title = type === 'saved' ? 'Saved Internships' : 'Liked Internships';
 
     return (
-        <div className="saved-liked-internships">
+        <div className="page-container" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <Header />
-            <main className="main-content">
+            <main className="main-content" style={{ flex: 1 }}>
                 <h2>{title}</h2>
                 <div className="internships-container">
                     {internships.map((internship) => (

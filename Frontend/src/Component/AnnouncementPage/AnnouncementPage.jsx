@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './AnnouncementPage.css';
 import Header from '../Header/Header';
-import CarouselViewer from '../CarouselViewer/CarouselViewer';
 
 const AnnouncementPage = () => {
-    const navigate = useNavigate();
     const [content, setContent] = useState('');
     const [photo, setPhoto] = useState(null);
     const [announcements, setAnnouncements] = useState([]);
@@ -83,7 +80,6 @@ const AnnouncementPage = () => {
                     <input type="file" accept="image/*" onChange={handlePhotoChange} />
                     <button type="submit">Post to Timeline</button>
                 </form>
-                <CarouselViewer announcements={announcements} />
             </div>
         </>
     );

@@ -28,6 +28,7 @@ model User {
   savedInternships    Internship[]   @relation("usersSavedRelation")
   likedInternships    Internship[]   @relation("usersLikedRelation")
   Announcement        Announcement[]
+  seenAnnouncements   Announcement[] @relation("SeenAnnouncements")
 }
 
 model Internship {
@@ -86,4 +87,5 @@ model Announcement {
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
   photo     String?
+  seenBy    User[]   @relation("SeenAnnouncements")
 }

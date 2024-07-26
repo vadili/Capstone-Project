@@ -154,7 +154,7 @@ const EditProfile = () => {
                             <h4 className="my-0 fw-normal">Edit Profile</h4>
                         </div>
                         <div className="card-body">
-                            <form onSubmit={handleSubmit} className="needs-validation" novalidate="">
+                            <form onSubmit={handleSubmit} className="needs-validation" >
                                 <div className="row g-3">
                                     <div className='col-12 text-center'>
                                         <label>Profile Picture:</label>

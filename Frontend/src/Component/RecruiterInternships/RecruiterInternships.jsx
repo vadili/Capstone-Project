@@ -2,32 +2,36 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './RecruiterInternships.css';
 import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 
 const RecruiterInternships = () => {
     const [internships, setInternships] = useState([]);
     const [displayedInternships, setDisplayedInternships] = useState([]);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchInternships = async () => {
-
-            try {
-                const user = JSON.parse(localStorage.getItem('user'))
-                const response = await fetch(`http://localhost:3001/api/recruiter/internships/${user.email}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setInternships(data);
-                    setDisplayedInternships(data);
-                } else {
-                    console.error('Error fetching internships:', response.statusText);
+        if (loading) {
+            const fetchInternships = async () => {
+                try {
+                    const user = JSON.parse(localStorage.getItem('user'));
+                    const response = await fetch(`http://localhost:3001/api/recruiter/internships/${user.email}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setInternships(data);
+                        setDisplayedInternships(data);
+                        setLoading(false);
+                    } else {
+                        console.error('Error fetching internships:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error fetching internships:', error);
                 }
-            } catch (error) {
-                console.error('Error fetching internships:', error);
-            }
-        };
+            };
 
-        fetchInternships();
-    }, []);
+            fetchInternships();
+        }
+    }, [loading]);
 
     const handleEdit = (id) => {
         localStorage.setItem('editInternshipId', id);
@@ -35,12 +39,14 @@ const RecruiterInternships = () => {
     };
 
     return (
-        <>
+        <div className="page-container">
             <Header />
-            <div>
+            <main className="main-content">
                 <h2>Created Internships</h2>
-                {internships.length === 0 ? (
-                    <p>No internships created yet.</p>
+                {loading ? (
+                    <div className="loading-overlay">
+                        <p>Loading...</p>
+                    </div>
                 ) : (
                     <ul>
                         {internships.map((internship) => (
@@ -58,8 +64,9 @@ const RecruiterInternships = () => {
                         ))}
                     </ul>
                 )}
-            </div>
-        </>
+            </main>
+            <Footer />
+        </div>
     );
 };
 

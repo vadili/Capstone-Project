@@ -14,6 +14,7 @@ import Notifications from './Component/Notifications/Notifications';
 import RecruiterInternships from './Component/RecruiterInternships/RecruiterInternships';
 import AnnouncementPage from './Component/AnnouncementPage/AnnouncementPage';
 import EditInternship from './Component/EditInternships/EditInternships';
+import CarouselViewerPage from './Component/CarouselViewerPage/CarouselViewerPage';
 import './App.css';
 
 const PrivateRoute = ({ children }) => {
@@ -135,6 +136,14 @@ function App() {
             element={
               <PrivateRoute>
                 <EditInternship />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/carousel-viewer"
+            element={
+              <PrivateRoute>
+                <CarouselViewerPage />
               </PrivateRoute>
             }
           />
