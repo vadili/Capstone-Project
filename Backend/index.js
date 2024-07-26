@@ -10,6 +10,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const fs = require('fs');
 const path = require('path');
+const moment = require('moment-timezone');
 
 const prisma = new PrismaClient();
 const app = express();
@@ -308,17 +309,28 @@ app.get('/api/search', async (req, res) => {
 });
 
 const cleanUpCache = async () => {
-    const tenMinutesAgo = new Date(Date.now() - 1 * 60 * 1000);
-    await prisma.cachedScore.deleteMany({
-        where: {
-            updatedAt: {
-                lt: tenMinutesAgo,
-            },
-        },
+    const tenMinutesAgoPT = moment().tz("America/Los_Angeles").subtract(10, 'minutes').toDate();
+    const cachedScores = await prisma.cachedScore.findMany();
+
+    const deletePromises = cachedScores.map(async (score) => {
+        const updatedAtPT = moment(score.updatedAt).tz("America/Los_Angeles").toDate();
+        if (updatedAtPT < tenMinutesAgoPT) {
+            await prisma.cachedScore.delete({
+                where: { id: score.id }
+            });
+        }
     });
+
+    await Promise.all(deletePromises);
 };
 
-setInterval(cleanUpCache, 1 * 60 * 1000);
+const cleanUpCacheWrapper = () => {
+    cleanUpCache().catch(error => console.error('Error during cache cleanup:', error));
+};
+
+const cacheExistingInternshipsWrapper = () => {
+    cacheExistingInternships().catch(error => console.error('Error during caching existing internships:', error));
+};
 
 app.get('/api/internships', async (req, res) => {
     try {
@@ -717,5 +729,6 @@ app.get('/api/recruiter/internships/:email', async (req, res) => {
 server.listen(port, async () => {
     console.log(`Server is running on port ${port}`);
     await cacheExistingInternships();
-    setInterval(cacheExistingInternships, 1 * 60 * 1000);
+    setInterval(cacheExistingInternshipsWrapper, 1 * 60 * 1000);
+    setInterval(cleanUpCacheWrapper, 1 * 60 * 1000);
 });

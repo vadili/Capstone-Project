@@ -4,10 +4,9 @@ import './CarouselViewer.css';
 const CarouselViewer = ({ announcements = [] }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [seenAnnouncements, setSeenAnnouncements] = useState([]);
-    const [shownIndices, setShownIndices] = useState(new Set());
 
     async function updateAnnouncement(newIndex) {
-        const userId = JSON.parse(localStorage.getItem('user')).id
+        const userId = JSON.parse(localStorage.getItem('user')).id;
         const token = localStorage.getItem('token');
 
         await fetch(`http://localhost:3001/api/users/${userId}/${announcements[newIndex].id}/seenAnnouncements`, {
@@ -16,7 +15,7 @@ const CarouselViewer = ({ announcements = [] }) => {
     }
 
     useEffect(() => {
-        const userId = JSON.parse(localStorage.getItem('user')).id
+        const userId = JSON.parse(localStorage.getItem('user')).id;
 
         const fetchSeenAnnouncements = async () => {
             const token = localStorage.getItem('token');
@@ -38,25 +37,23 @@ const CarouselViewer = ({ announcements = [] }) => {
             const timer = setInterval(() => {
                 setCurrentIndex((prevIndex) => {
                     const newIndex = (prevIndex + 1) % announcements.length;
-                    setShownIndices((prevShownIndices) => new Set(prevShownIndices).add(newIndex));
                     if (!seenAnnouncements.includes(announcements[newIndex].id)) {
                         setSeenAnnouncements((prevSeen) => [...prevSeen, announcements[newIndex].id]);
-                        updateAnnouncement(newIndex)
+                        updateAnnouncement(newIndex);
                     }
                     return newIndex;
                 });
             }, 5000);
             return () => clearInterval(timer);
         }
-    }, [announcements.length]);
+    }, [announcements.length, seenAnnouncements]);
 
     const handleNext = () => {
         setCurrentIndex((prevIndex) => {
             const newIndex = (prevIndex + 1) % announcements.length;
-            setShownIndices((prevShownIndices) => new Set(prevShownIndices).add(newIndex));
             if (!seenAnnouncements.includes(announcements[newIndex].id)) {
                 setSeenAnnouncements((prevSeen) => [...prevSeen, announcements[newIndex].id]);
-                updateAnnouncement(newIndex)
+                updateAnnouncement(newIndex);
             }
             return newIndex;
         });
@@ -65,10 +62,9 @@ const CarouselViewer = ({ announcements = [] }) => {
     const handlePrev = () => {
         setCurrentIndex((prevIndex) => {
             const newIndex = (prevIndex - 1 + announcements.length) % announcements.length;
-            setShownIndices((prevShownIndices) => new Set(prevShownIndices).add(newIndex));
             if (!seenAnnouncements.includes(announcements[newIndex].id)) {
                 setSeenAnnouncements((prevSeen) => [...prevSeen, announcements[newIndex].id]);
-                updateAnnouncement(newIndex)
+                updateAnnouncement(newIndex);
             }
             return newIndex;
         });
@@ -78,14 +74,6 @@ const CarouselViewer = ({ announcements = [] }) => {
         let classNames = 'carousel-item';
         if (index === currentIndex) {
             classNames += ' active';
-        } else if (
-            index === (currentIndex + 1) % announcements.length ||
-            index === (currentIndex - 1 + announcements.length) % announcements.length
-        ) {
-            classNames += ' inactive';
-        }
-        if (seenAnnouncements.includes(announcements[index].id)) {
-            classNames += ' shown';
         }
         return classNames;
     };
