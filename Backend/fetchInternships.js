@@ -12,11 +12,53 @@ async function fetchInternships() {
     });
 
     if (!response.ok) {
+        'https://jobs-api19.p.rapidapi.com/jobs?limit=100'
         const errorData = await response.json();
         throw new Error(`API error: ${errorData.message}`);
     }
     const data = await response.json();
     return data;
+}
+
+async function updateCacheForListing(listing) {
+    const { id, title, description } = listing;
+    const words = new Set([...title.split(/\W+/), ...description.split(/\W+/)]);
+
+    for (const word of words) {
+        if (word) {
+            const lowerCaseWord = word.toLowerCase();
+            const titleScore = (title.toLowerCase().split(lowerCaseWord).length - 1) * 10;
+            const bodyScore = Math.min((description.toLowerCase().split(lowerCaseWord).length - 1), 5);
+            const totalScore = titleScore + bodyScore;
+
+            await prisma.cachedScore.upsert({
+                where: { internshipId_word: { internshipId: id, word: lowerCaseWord } },
+                update: { score: totalScore },
+                create: {
+                    internship: {
+                        connect: {
+                            id,
+                        },
+                    },
+                    word: lowerCaseWord,
+                    score: totalScore
+                },
+            });
+
+            const cachedScores = await prisma.cachedScore.findMany({
+                where: { word: lowerCaseWord },
+                orderBy: { score: 'desc' }
+            });
+
+            if (cachedScores.length > 10) {
+                const scoresToDelete = cachedScores.slice(10);
+                const deletePromises = scoresToDelete.map(score => prisma.cachedScore.delete({
+                    where: { id: score.id }
+                }));
+                await Promise.all(deletePromises);
+            }
+        }
+    }
 }
 
 async function saveInternships() {
@@ -29,7 +71,7 @@ async function saveInternships() {
         }
 
         for (const job of internships) {
-            await prisma.internship.upsert({
+            const upsertedInternship = await prisma.internship.upsert({
                 where: {
                     title_company: {
                         title: job.title,
@@ -58,6 +100,9 @@ async function saveInternships() {
                     postedAt: new Date(job.posted_date)
                 }
             });
+
+            await updateCacheForListing(upsertedInternship);
+
         }
     } catch (error) {
         console.error(error);

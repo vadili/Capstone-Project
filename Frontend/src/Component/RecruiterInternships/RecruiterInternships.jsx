@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './RecruiterInternships.css';
 import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
 
 const RecruiterInternships = () => {
     const [internships, setInternships] = useState([]);
@@ -65,7 +64,6 @@ const RecruiterInternships = () => {
                     </ul>
                 )}
             </main>
-            <Footer />
         </div>
     );
 };

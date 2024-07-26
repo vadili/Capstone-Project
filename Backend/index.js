@@ -308,7 +308,7 @@ app.get('/api/search', async (req, res) => {
 });
 
 const cleanUpCache = async () => {
-    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+    const tenMinutesAgo = new Date(Date.now() - 1 * 60 * 1000);
     await prisma.cachedScore.deleteMany({
         where: {
             updatedAt: {
@@ -318,7 +318,7 @@ const cleanUpCache = async () => {
     });
 };
 
-setInterval(cleanUpCache, 10 * 60 * 1000);
+setInterval(cleanUpCache, 1 * 60 * 1000);
 
 app.get('/api/internships', async (req, res) => {
     try {
@@ -418,6 +418,8 @@ app.put('/api/internships/:id', async (req, res) => {
                 url,
             },
         });
+
+        await updateCacheForListing(internship);
 
         res.json(internship);
     } catch (error) {
@@ -715,5 +717,5 @@ app.get('/api/recruiter/internships/:email', async (req, res) => {
 server.listen(port, async () => {
     console.log(`Server is running on port ${port}`);
     await cacheExistingInternships();
-    setInterval(cleanUpCache, 10 * 60 * 1000);
+    setInterval(cacheExistingInternships, 1 * 60 * 1000);
 });
