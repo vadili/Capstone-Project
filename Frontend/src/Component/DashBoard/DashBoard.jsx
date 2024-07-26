@@ -14,6 +14,15 @@ const DashBoard = () => {
     const [likedInternships, setLikedInternships] = useState([]);
     const [displayedInternships, setDisplayedInternships] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [seenAnnouncements, setSeenAnnouncements] = useState([]);
+    const [announcements, setAnnouncements] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setLoading(false); // Set loading to false after 1.5 seconds
+        }, 1500);
+    }, []);
 
     const fetchInternships = async () => {
         try {
@@ -41,6 +50,8 @@ const DashBoard = () => {
                 });
                 if (response.ok) {
                     const data = await response.json();
+
+                    setSeenAnnouncements(data.seenAnnouncements)
                     setSavedInternships(Array.isArray(data.savedInternships) ? data.savedInternships.map(internship => internship.id) : []);
                     setLikedInternships(Array.isArray(data.likedInternships) ? data.likedInternships.map(internship => internship.id) : []);
                 } else {
@@ -70,6 +81,25 @@ const DashBoard = () => {
             }
         };
 
+        const fetchAnnouncements = async () => {
+            try {
+                const response = await fetch('http://localhost:3001/api/announcements', {
+                    headers: {
+                        'Authorization': `${localStorage.getItem('token')}`
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setAnnouncements(data);
+                } else {
+                    console.error('Error fetching announcements:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching announcements:', error);
+            }
+        };
+
+        fetchAnnouncements();
         fetchInternships();
         fetchNotifications();
         fetchUserData();
@@ -190,7 +220,12 @@ const DashBoard = () => {
 
     return (
         <div className="dashboard">
-            <Header showSavedInternships={showSavedInternships} showLikedInternships={showLikedInternships} />
+            {loading && (
+                <div className="loading-overlay">
+                    <p>Loading...</p>
+                </div>
+            )}
+            <Header showSavedInternships={showSavedInternships} showLikedInternships={showLikedInternships} postCount={announcements ? announcements.length - seenAnnouncements.length : 0} />
             <main className="main-content">
                 <div className="search-bar">
                     <input

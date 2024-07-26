@@ -526,6 +526,7 @@ app.get('/api/user', authenticateToken, async (req, res) => {
             include: {
                 savedInternships: true,
                 likedInternships: true,
+                seenAnnouncements: true,
             }
         });
 
@@ -576,6 +577,19 @@ app.delete('/api/user', authenticateToken, async (req, res) => {
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
+});
+
+app.post('/api/users/:userId/:announcementId/seenAnnouncements', async (req, res) => {
+    const { userId, announcementId } = req.params;
+    const user = await prisma.user.update({
+        where: { id: parseInt(userId) },
+        data: {
+            seenAnnouncements: {
+                connect: { id: parseInt(announcementId) },
+            },
+        },
+    });
+    res.json(user);
 });
 
 app.put('/api/user/profile-picture', authenticateToken, upload.single('profilePicture'), async (req, res) => {
