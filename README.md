@@ -26,11 +26,6 @@ Habit:[Users are likely to use the app regularly, especially during recruitment 
 
 Scope:[TechLink's initial scope will focus on essential features like login, logout, and profile creation. These core functionalities will allow users to access the platform, create their profiles, and start building their presence. As we move beyond the MVP, we'll introduce more advanced features, such as keyword-based searching and real-time announcement. Some stretch goals include 1) real-time private chat, and 2) email subscriptions. By focusing on these additional features, we aim to enhance the user experience and provide more value to both students and recruiters on the platform.]
 
-FindMe Matching System Overview
-
-FindMe utilizes a machine learning algorithm to facilitate personalized and effective connections between students and recruiters. By leveraging comprehensive profiles and detailed questionnaires, the platform ensures that each match is tailored to the specific needs and preferences of both parties. Here's an in-depth look at how the system operates:
-
-
 Product Spec
 
 User Roles
@@ -80,6 +75,10 @@ Stretched/Optional:
 
 - As a student, I want to open a private chat room and send real-time messages to recruiters
 - As a student, I want to be able to subscribe and get emails from recruiters.
+- As a student, I can save and like internships.
+- As a recruiter, I can see my created internships.
+- As a user, I want to post on a timeline to share updates, achievements, and relevant information.
+- As a user, I can upload a profile picture.
 
 
 Screen Archetypes
@@ -168,6 +167,53 @@ Navigation
 	- May allow users to edit or delete their profile information
 - Announcement Screen: Announcement shared by recruiters realtime
 
+
+Technical Challenges
+
+Technical Challenge #1 - Real-time Announcement
+
+What
+
+Build a real-time announcement system for recruiters. The recruiter user type can open an announcement page, and publish an event to all students currently logged in. The students will see a notification icon on their top navigation bar, with a number shown reflecting how many unread announcements there are. When clicking onto the notification, they can see the announcement content. 
+
+How
+
+Socket.IO is a JS library that supports real-time updates. Instead of having to refresh the page to refetch the new events, Socket.IO client listens to updates from the server in real-time and pushes updates to the changes to frontend. 
+
+Some useful documentation/tutorial: 
+- https://socket.io/how-to/use-with-react
+- https://www.youtube.com/watch?v=djMy4QsPWiI
+
+Some online example that can be used as a reference: 
+- https://www.youtube.com/watch?v=7vVqMR96T5o
+
+End goal & Validation 
+
+- Test the feature behavior by logging in with two students on two opened browser pages, and one recruiter user. The goal is that
+	- The recruiter can create a public announcement via an input form 
+	- The two students can both receive the notification in real-time and click to view the announcement content. 
+	- When one student is in a logged out state, and the recruiter sends an announcement. By the time the student logs back in, the student will see the notification she missed in her notification icons as well. 
+	- When the notification is dismissed once, it no longer shows up as ‘unread’ again. 
+
+
+
+Technical Challenge #2 - Simple Keywords-Based Searching 
+
+What
+
+Build a single keyword-based search system so that the student can search for a particular internship listing. Given the long list of internship listings, and the amount of texts in each listing, we want the users' searches for a single keyword to be super fast. And for the searches to be really fast, we want to have done most of the work before the user actually searches.
+
+How
+
+Build a keyword-based search system that takes in a single search keyword, and score each internship listing with: 
+- 10 points if the keyword is in the title
+- 1 point for every occurrence of the keyword in the listing body, up to 5 points
+
+Then, when any new listing is added to the DB, calculate and cache on the server its score for every word in its listing. When the user enters a search term, just query the score cache to find the top listings to return. Handle any possible edge cases, like cleaning up the cache after every 10 minutes and updating the cache when new listings are created. 
+
+Steps
+
+Create a new table to store the caches, figuring out what the columns in that table should be, figuring out when to update the cache to make sure it's always correct, and then a bit of logic around actually running the cache update for a new listing -- looping over the content, hopefully not re-running the scoring for a repeat word
 
 
 Database Integration: I've chosen to use Prisma with PostgreSQL and Express for my project, following what I learned at CodePath. Prisma's seamless integration with PostgreSQL and its ORM capabilities will streamline database management. PostgreSQL's strong ACID compliance and JSONB support fit well for structured data handling in my project. This setup ensures both efficiency and scalability as the project progresses.
