@@ -63,7 +63,7 @@ const CreateInternship = () => {
     };
 
     return (
-        <div className="page-container">
+        <div className="dashboard">
             <Header />
             <main className="main-content">
                 <div className="create-internship-container">
