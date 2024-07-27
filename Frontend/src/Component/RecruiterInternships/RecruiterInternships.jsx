@@ -38,7 +38,7 @@ const RecruiterInternships = () => {
     };
 
     return (
-        <div className="page-container">
+        <div className="dashboard">
             <Header />
             <main className="main-content">
                 <h2>Created Internships</h2>
