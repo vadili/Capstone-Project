@@ -14,6 +14,8 @@ GitHub Repository Link: [https://github.com/vadili?tab=repositories]
 
 Docs link: https://docs.google.com/document/d/14sie1bPB0aDJwBRglfbTcDlu8tFEoHv7aqwpb_7YEHM/edit
 
+Demo Link: https://www.loom.com/share/eee75fe9ad0644b298639065c053bd20 
+
 Overview:[TechLink is an interactive app designed to bridge the gap between recruiters and college students from underrepresented backgrounds, lesser-known schools, and diverse genders. The app aims to provide these students with access to tech internships that they might not be aware of. Unlike typical professional networking platforms, TechLink facilitates direct communication between recruiters and students, ensuring more personalized and effective interactions.]
 
 Category:[Social Networking]
@@ -235,6 +237,8 @@ Interesting Cursor Interaction: To enhance user experience, I will implement cus
 UI Component with Custom Visual Styling: The app will feature UI components with custom visual styling. For example, the profile card on the Profile Screen will have a unique design with rounded corners, shadow effects, and personalized color schemes based on user preferences. This component will be built using CSS and styled-components to ensure maintainability and scalability.
 
 Loading State: To handle loading states gracefully, I will implement loading spinners or skeleton screens. Whenever data is being fetched from the internships API or during login/signup processes, users will see a loading spinner or skeleton screen. These visual indicators will effectively communicate that content is loading, thereby enhancing the perceived performance of the app and keeping users informed about ongoing processes. This approach ensures a smoother user experience by reducing uncertainty and providing clear feedback during data retrieval and authentication operations.
+
+
 ![Image 8-9-24 at 11 52 AM](https://github.com/user-attachments/assets/bc5fa191-8247-4063-9d2f-d101fc37cd46)
 ![Image 8-9-24 at 11 54 AM](https://github.com/user-attachments/assets/1d262aaa-2421-43b5-bb62-90bb5fcd1bce)
 ![Image 8-9-24 at 11 55 AM](https://github.com/user-attachments/assets/800c5bcd-b066-4c75-ae2d-956a7cb99dd5)
