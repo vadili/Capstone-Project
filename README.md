@@ -235,3 +235,19 @@ Interesting Cursor Interaction: To enhance user experience, I will implement cus
 UI Component with Custom Visual Styling: The app will feature UI components with custom visual styling. For example, the profile card on the Profile Screen will have a unique design with rounded corners, shadow effects, and personalized color schemes based on user preferences. This component will be built using CSS and styled-components to ensure maintainability and scalability.
 
 Loading State: To handle loading states gracefully, I will implement loading spinners or skeleton screens. Whenever data is being fetched from the internships API or during login/signup processes, users will see a loading spinner or skeleton screen. These visual indicators will effectively communicate that content is loading, thereby enhancing the perceived performance of the app and keeping users informed about ongoing processes. This approach ensures a smoother user experience by reducing uncertainty and providing clear feedback during data retrieval and authentication operations.
+![Image 8-9-24 at 11 52 AM](https://github.com/user-attachments/assets/bc5fa191-8247-4063-9d2f-d101fc37cd46)
+![Image 8-9-24 at 11 54 AM](https://github.com/user-attachments/assets/1d262aaa-2421-43b5-bb62-90bb5fcd1bce)
+![Image 8-9-24 at 11 55 AM](https://github.com/user-attachments/assets/800c5bcd-b066-4c75-ae2d-956a7cb99dd5)
+![Image 8-9-24 at 11 55 AM (1)](https://github.com/user-attachments/assets/f5d009fc-0908-437a-84c4-6041693edbb4)
+![Image 8-9-24 at 11 59 AM](https://github.com/user-attachments/assets/a03d894a-a3a4-43a6-9c17-a346d7ec1fe3)
+![Image 8-9-24 at 11 59 AM (1)](https://github.com/user-attachments/assets/547f9a2f-86a4-410b-847f-a472199bb35e)
+![Image 8-9-24 at 12 00 PM](https://github.com/user-attachments/assets/ee976c44-01b9-40c7-8d8b-ffac77079b49)
+![Image 8-9-24 at 12 00 PM (1)](https://github.com/user-attachments/assets/b5052783-b81e-4780-bfc0-d4e7fb0eef94)
+![Image 8-9-24 at 12 01 PM](https://github.com/user-attachments/assets/673f50b2-09ec-40ee-a2b9-ff83c2c6596b)
+
+
+
+
+
+
+
